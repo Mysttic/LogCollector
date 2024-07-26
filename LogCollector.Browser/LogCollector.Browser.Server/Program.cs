@@ -9,6 +9,10 @@ builder.Services.AddDbContext<LogCollectorDbContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddScoped<ILogEntryRepository, LogEntryRepository>();
+builder.Services.AddScoped<IAlertRepository, AlertRepository>();
+builder.Services.AddScoped<IMonitorRepository, MonitorRepository>();
+
 builder.Services.AddCors(options =>
 {
 	options.AddPolicy("AllowAllOrigins",

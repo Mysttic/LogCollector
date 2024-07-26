@@ -4,6 +4,6 @@ public class LogEntryProfile : Profile
 {
 	public LogEntryProfile()
 	{
-		CreateMap<LogEntryPost, LogEntry>();
+		CreateMap<LogEntryPost, LogEntry>().ReverseMap();
 	}
 }

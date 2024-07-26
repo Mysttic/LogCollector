@@ -7,5 +7,7 @@ public class LogCollectorDbContext : DbContext
 	}
 
 	public DbSet<LogEntry> Logs { get; set; }
+	public DbSet<Alert> Alerts { get; set; }
+	public DbSet<Monitor> Monitors { get; set; }
 }
 
