@@ -12,7 +12,7 @@ const LogChart = ({ data }) => {
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: data.map(log => log.timestamp),
+                    labels: data.map(log => log.applicationName),
                     datasets: [
                         {
                             label: 'Logs',
@@ -27,7 +27,7 @@ const LogChart = ({ data }) => {
                     scales: {
                         x: {
                             type: 'category',
-                            labels: data.map(log => log.timestamp)
+                            labels: data.map(log => log.applicationName)
                         },
                         y: {
                             beginAtZero: true

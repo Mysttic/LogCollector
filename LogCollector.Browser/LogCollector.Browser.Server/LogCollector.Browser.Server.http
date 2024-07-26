@@ -1,6 +1,6 @@
-@LogCollector.Browser.Server_HostAddress = http://localhost:5237
+@LogCollector.Browser.Server_HostAddress = http://localhost:5205
 
-GET {{LogCollector.Browser.Server_HostAddress}}/weatherforecast/
+GET {{LogCollector.Browser.Server_HostAddress}}/api/LogEntry/
 Accept: application/json
 
 ###

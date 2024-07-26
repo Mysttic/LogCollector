@@ -11,13 +11,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogCollector.ServiceDefault
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogCollector.Domain", "LogCollector.Domain\LogCollector.Domain.csproj", "{3B557C27-1E00-40DD-8FD5-A877B33B2BEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogCollector.Entities", "LogCollector.Entities\LogCollector.Entities.csproj", "{7CBF3697-06C4-4BC5-A0B9-71D008B5819A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogCollector.Entities", "LogCollector.Entities\LogCollector.Entities.csproj", "{7CBF3697-06C4-4BC5-A0B9-71D008B5819A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogCollector.Browser.Backend", "LogCollector.Browser.Backend\LogCollector.Browser.Backend.csproj", "{2CD5BF55-14B0-4FE3-9D31-EE391A482513}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogCollector.Browser.Server", "LogCollector.Browser\LogCollector.Browser.Server\LogCollector.Browser.Server.csproj", "{2CD5BF55-14B0-4FE3-9D31-EE391A482513}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogCollector.Browser.Server", "LogCollector.Browser\LogCollector.Browser.Server\LogCollector.Browser.Server.csproj", "{A6DB9FCE-9BB1-4BA6-AE75-FF2EFD498EC0}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "LogCollector.Browser.Client", "LogCollector.Browser\LogCollector.Browser.Client\LogCollector.Browser.Client.esproj", "{A7A707A8-2FDE-408B-BA6A-EB04B7531405}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "logcollector.browser.client", "LogCollector.Browser\logcollector.browser.client\logcollector.browser.client.esproj", "{A7A707A8-2FDE-408B-BA6A-EB04B7531405}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LogCollectorBrowser", "LogCollectorBrowser", "{D4B2C811-598C-4436-B0C1-FC57AAB90156}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LogCollectorBase", "LogCollectorBase", "{E54A53CC-71B3-4B3C-A309-F7D04057C917}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LogCollectorService", "LogCollectorService", "{0C9E1955-94C9-4C3E-82FA-97BE59B5DACC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetAspire", "NetAspire", "{02A08E8A-E107-4A86-A003-6CA35044F7F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,10 +55,6 @@ Global
 		{2CD5BF55-14B0-4FE3-9D31-EE391A482513}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CD5BF55-14B0-4FE3-9D31-EE391A482513}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CD5BF55-14B0-4FE3-9D31-EE391A482513}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A6DB9FCE-9BB1-4BA6-AE75-FF2EFD498EC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A6DB9FCE-9BB1-4BA6-AE75-FF2EFD498EC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A6DB9FCE-9BB1-4BA6-AE75-FF2EFD498EC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A6DB9FCE-9BB1-4BA6-AE75-FF2EFD498EC0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A7A707A8-2FDE-408B-BA6A-EB04B7531405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A7A707A8-2FDE-408B-BA6A-EB04B7531405}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7A707A8-2FDE-408B-BA6A-EB04B7531405}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -62,6 +64,15 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6107FF5F-4BC4-470F-8328-F3D9222F8639} = {0C9E1955-94C9-4C3E-82FA-97BE59B5DACC}
+		{5D5504EF-837A-4F1A-9ABB-4B11B183B291} = {02A08E8A-E107-4A86-A003-6CA35044F7F3}
+		{20449938-EED7-476F-82F9-5ECC5E0041EA} = {02A08E8A-E107-4A86-A003-6CA35044F7F3}
+		{3B557C27-1E00-40DD-8FD5-A877B33B2BEC} = {E54A53CC-71B3-4B3C-A309-F7D04057C917}
+		{7CBF3697-06C4-4BC5-A0B9-71D008B5819A} = {E54A53CC-71B3-4B3C-A309-F7D04057C917}
+		{2CD5BF55-14B0-4FE3-9D31-EE391A482513} = {D4B2C811-598C-4436-B0C1-FC57AAB90156}
+		{A7A707A8-2FDE-408B-BA6A-EB04B7531405} = {D4B2C811-598C-4436-B0C1-FC57AAB90156}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB5D34E6-8EA5-49F0-B76E-32635FD6C5DF}
