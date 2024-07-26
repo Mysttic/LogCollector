@@ -30,4 +30,8 @@
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LogCollector.Entities\LogCollector.Entities.csproj" />
+  </ItemGroup>
+
 </Project>

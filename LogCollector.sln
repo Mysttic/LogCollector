@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogCollector.ServiceDefault
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogCollector.Domain", "LogCollector.Domain\LogCollector.Domain.csproj", "{3B557C27-1E00-40DD-8FD5-A877B33B2BEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogCollector.Entities", "LogCollector.Entities\LogCollector.Entities.csproj", "{7CBF3697-06C4-4BC5-A0B9-71D008B5819A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogCollector.Browser.Backend", "LogCollector.Browser.Backend\LogCollector.Browser.Backend.csproj", "{2CD5BF55-14B0-4FE3-9D31-EE391A482513}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{3B557C27-1E00-40DD-8FD5-A877B33B2BEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B557C27-1E00-40DD-8FD5-A877B33B2BEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B557C27-1E00-40DD-8FD5-A877B33B2BEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CBF3697-06C4-4BC5-A0B9-71D008B5819A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CBF3697-06C4-4BC5-A0B9-71D008B5819A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CBF3697-06C4-4BC5-A0B9-71D008B5819A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CBF3697-06C4-4BC5-A0B9-71D008B5819A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CD5BF55-14B0-4FE3-9D31-EE391A482513}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CD5BF55-14B0-4FE3-9D31-EE391A482513}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CD5BF55-14B0-4FE3-9D31-EE391A482513}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CD5BF55-14B0-4FE3-9D31-EE391A482513}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
