@@ -1,0 +1,6 @@
+@LogCollector.Browser.Server_HostAddress = http://localhost:5237
+
+GET {{LogCollector.Browser.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
