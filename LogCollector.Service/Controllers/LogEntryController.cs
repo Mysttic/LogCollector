@@ -15,9 +15,9 @@ public class LogEntryController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostLog(LogEntryPost logEntryPost)
+    public async Task<IActionResult> PostLog(CreateLogEntryDto logEntryPost)
 	{
-		var logEntry = await _logEntryRepository.AddAsync<LogEntryPost, LogEntry>(logEntryPost);
+		var logEntry = await _logEntryRepository.AddAsync<CreateLogEntryDto, LogEntry>(logEntryPost);
 
 		return Created($"/api/LogEntry/{logEntry.Id}", logEntry);
 	}
