@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,13 @@ builder.Services.AddDbContext<LogCollectorDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAutoMapper(typeof(LogEntryProfile));
+
+
+
 var app = builder.Build();
+
+
 
 app.MapDefaultEndpoints();
 
@@ -24,20 +31,19 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+else
+{
+	app.UseMiddleware<LogCollectorMiddleware>();
+}
 
 app.UseHttpsRedirection();
 
-app.MapPost("/api/logs", async (LogCollectorDbContext db, LogEntry logEntry) =>
+app.MapPost("/api/logs", async (LogCollectorDbContext db, LogEntryPost logEntryPost, IMapper mapper) =>
 {
-	logEntry.Timestamp = DateTime.UtcNow;
+	var logEntry = mapper.Map<LogEntry>(logEntryPost);
 	await db.Logs.AddAsync(logEntry);
 	await db.SaveChangesAsync();
 	return Results.Created($"/api/logs/{logEntry.Id}", logEntry);
 });
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-	public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
