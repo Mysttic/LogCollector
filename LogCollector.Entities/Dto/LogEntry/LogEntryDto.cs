@@ -1,6 +1,8 @@
-﻿public class LogEntryDto : BaseLogEntryDto
+﻿public abstract class LogEntryDto
 {
-	public int Id { get; set; }
-	public DateTime CreatedAt { get; set; }
-	public DateTime UpdatedAt { get; set; }
+	public string? DeviceId { get; set; }
+	public string? ApplicationName { get; set; }
+	public string? IpAddress { get; set; }
+	public string? LogMessage { get; set; }
+	public string? LogContent { get; set; }
 }

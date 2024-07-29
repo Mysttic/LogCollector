@@ -1,5 +1,6 @@
-﻿public class BaseAlertDto
+﻿public class BaseAlertDto : AlertDto
 {
-	public string? Message { get; set; }
-	public int MonitorId { get; set; }
+	public int Id { get; set; }
+	public DateTime CreatedAt { get; set; }
+	public DateTime UpdatedAt { get; set; }
 }

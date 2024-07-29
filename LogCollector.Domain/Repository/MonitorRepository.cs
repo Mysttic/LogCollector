@@ -28,12 +28,12 @@ public class MonitorRepository : GenericRepository<Monitor>, IMonitorRepository
 		};
 	}
 
-	public async Task<MonitorDto> GetMonitorDetailsAsync(int id)
+	public async Task<BaseMonitorDto> GetMonitorDetailsAsync(int id)
 	{
 		var monitor = await _context.Monitors
 			.Where(m=>m.IsActive)
 			.Include(m => m.Alerts)
-			.ProjectTo<MonitorDto>(_mapper.ConfigurationProvider)
+			.ProjectTo<BaseMonitorDto>(_mapper.ConfigurationProvider)
 			.FirstOrDefaultAsync(m => m.Id == id);
 
 		if (monitor == null)

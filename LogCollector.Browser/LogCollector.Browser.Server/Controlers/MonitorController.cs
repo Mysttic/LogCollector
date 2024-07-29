@@ -19,17 +19,17 @@ public class MonitorController : ControllerBase
 
 	// GET: api/<MonitorController>
 	[HttpGet]
-	public async Task<ActionResult<PagedResult<MonitorDto>>> GetPagedMonitors(
+	public async Task<ActionResult<PagedResult<BaseMonitorDto>>> GetPagedMonitors(
 		[FromQuery] MonitorQueryParameters monitorQueryParameters)
 	{
-		var pagedMonitorResult = await _monitorRepository.GetAllAsync<MonitorDto>(monitorQueryParameters);
+		var pagedMonitorResult = await _monitorRepository.GetAllAsync<BaseMonitorDto>(monitorQueryParameters);
 
 		return Ok(new { pagedMonitorResult.TotalCount, pagedMonitorResult });
 	}
 
 	// GET api/<MonitorController>/5
 	[HttpGet("{id}")]
-	public async Task<ActionResult<MonitorDto>> GetMonitor(int id)
+	public async Task<ActionResult<BaseMonitorDto>> GetMonitor(int id)
 	{
 		var monitor = await _monitorRepository.GetMonitorDetailsAsync(id);
 
@@ -38,9 +38,9 @@ public class MonitorController : ControllerBase
 
 	// POST api/<MonitorController>
 	[HttpPost]
-	public async Task<IActionResult> PostMonitor([FromBody] CreateMonitorDto createMonitorDto)
+	public async Task<IActionResult> PostMonitor([FromBody] MonitorDto monitorDto)
 	{
-		var monitor = await _monitorRepository.AddAsync<CreateMonitorDto, Monitor>(createMonitorDto);
+		var monitor = await _monitorRepository.AddAsync<MonitorDto, Monitor>(monitorDto);
 
 		return Created($"/api/Monitor/{monitor.Id}", monitor);
 
@@ -48,11 +48,11 @@ public class MonitorController : ControllerBase
 
 	// PUT api/<MonitorController>/5
 	[HttpPut("{id}")]
-	public async Task<IActionResult> PutMonitor(int id, [FromBody] UpdateMonitorDto updateMonitorDto)
+	public async Task<IActionResult> PutMonitor(int id, [FromBody] MonitorDto monitorDto)
 	{
 		try
 		{
-			await _monitorRepository.UpdateAsync(id, updateMonitorDto);
+			await _monitorRepository.UpdateAsync(id, monitorDto);
 		}
 		catch (DbUpdateConcurrencyException)
 		{

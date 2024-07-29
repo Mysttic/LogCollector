@@ -4,16 +4,16 @@ public class LogEntryProfile : Profile
 {
 	public LogEntryProfile()
 	{
-		CreateMap<CreateLogEntryDto, LogEntry>().ReverseMap();
 		CreateMap<LogEntryDto, LogEntry>().ReverseMap();
+		CreateMap<BaseLogEntryDto, LogEntry>().ReverseMap();
 
-		CreateMap<CreateMonitorDto, Monitor>().ReverseMap();
-		CreateMap<UpdateMonitorDto, Monitor>().ReverseMap();
 		CreateMap<MonitorDto, Monitor>().ReverseMap();
+		CreateMap<MonitorDto, Monitor>().ReverseMap();
+		CreateMap<BaseMonitorDto, Monitor>().ReverseMap();
 
-		CreateMap<CreateAlertDto, Alert>().ReverseMap();
-		CreateMap<UpdateAlertDto, Alert>().ReverseMap();
 		CreateMap<AlertDto, Alert>().ReverseMap();
+		CreateMap<AlertDto, Alert>().ReverseMap();
+		CreateMap<BaseAlertDto, Alert>().ReverseMap();
 
 	}
 }

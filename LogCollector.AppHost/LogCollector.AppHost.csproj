@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LogCollector.Browser\LogCollector.Browser.Server\LogCollector.Browser.Server.csproj" />
-    <ProjectReference Include="..\LogCollector.Monitor\LogCollector.Monitor.Server\LogCollector.Monitor.Server.csproj" />
+    <ProjectReference Include="..\LogCollector.Monitor\LogCollector.Monitor.csproj" />
     <ProjectReference Include="..\LogCollector.Service\LogCollector.Service.csproj" />
   </ItemGroup>
 

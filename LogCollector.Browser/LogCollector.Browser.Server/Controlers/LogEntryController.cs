@@ -16,10 +16,10 @@ public class LogEntryController : Controller
 	}
 
 	[HttpGet]
-	public async Task<ActionResult<PagedResult<LogEntryDto>>> GetPagedLogs(
+	public async Task<ActionResult<PagedResult<BaseLogEntryDto>>> GetPagedLogs(
 		[FromQuery] LogQueryParameters logQueryParameters)
 	{
-		var pagedLogEntryResult = await _logEntryRepository.GetAllAsync<LogEntryDto>(logQueryParameters);
+		var pagedLogEntryResult = await _logEntryRepository.GetAllAsync<BaseLogEntryDto>(logQueryParameters);
 
 		return Ok(new { pagedLogEntryResult.TotalCount, pagedLogEntryResult });
 	}

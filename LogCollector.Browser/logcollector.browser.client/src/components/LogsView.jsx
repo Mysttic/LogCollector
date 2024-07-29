@@ -70,7 +70,7 @@ const LogsView = () => {
             <table className="table">
                 <thead>
                     <tr>
-                        <th>Timestamp</th>
+                        <th>Created At</th>
                         <th>Device ID</th>
                         <th>Application Name</th>
                         <th>IP Address</th>
@@ -80,7 +80,7 @@ const LogsView = () => {
                 <tbody>
                     {logs.map(log => (
                         <tr key={log.id}>
-                            <td>{log.timestamp}</td>
+                            <td>{log.createdAt}</td>
                             <td>{log.deviceId}</td>
                             <td>{log.applicationName}</td>
                             <td>{log.ipAddress}</td>

@@ -1,0 +1,6 @@
+@LogCollector.Monitor_HostAddress = http://localhost:5025
+
+GET {{LogCollector.Monitor_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

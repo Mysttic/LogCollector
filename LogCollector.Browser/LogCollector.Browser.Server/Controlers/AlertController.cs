@@ -20,28 +20,28 @@ public class AlertController : ControllerBase
 
     // GET: api/<AlertController>
     [HttpGet]
-	public async Task<ActionResult<PagedResult<AlertDto>>> GetPagedAlerts(
+	public async Task<ActionResult<PagedResult<BaseAlertDto>>> GetPagedAlerts(
 		[FromQuery] AlertQueryParameters alertQueryParameters)
 	{
-		var pagedAlertResult = await _alertRepository.GetAllAsync<AlertDto>(alertQueryParameters);
+		var pagedAlertResult = await _alertRepository.GetAllAsync<BaseAlertDto>(alertQueryParameters);
 
 		return Ok(new { pagedAlertResult.TotalCount, pagedAlertResult });
 	}
 
 	// GET api/<AlertController>/5
 	[HttpGet("{id}")]
-	public async Task<ActionResult<AlertDto>> GetAlert(int id)
+	public async Task<ActionResult<BaseAlertDto>> GetAlert(int id)
 	{
-		var alertResult = await _alertRepository.GetAsync<AlertDto>(id);
+		var alertResult = await _alertRepository.GetAsync<BaseAlertDto>(id);
 
 		return Ok(alertResult);
 	}
 
 	// POST api/<AlertController>
 	[HttpPost]
-	public async Task<IActionResult> PostAlert([FromBody] CreateAlertDto createAlertDto)
+	public async Task<IActionResult> PostAlert([FromBody] AlertDto alertDto)
 	{
-		var alert = await _alertRepository.AddAsync<CreateAlertDto, Alert>(createAlertDto);
+		var alert = await _alertRepository.AddAsync<AlertDto, Alert>(alertDto);
 		
 		return Created($"/api/Alert/{alert.Id}", alert);
 
@@ -49,12 +49,12 @@ public class AlertController : ControllerBase
 
 	// PUT api/<AlertController>/5
 	[HttpPut("{id}")]
-	public async Task<IActionResult> PutAlert(int id, [FromBody] UpdateAlertDto updateAlertDto)
+	public async Task<IActionResult> PutAlert(int id, [FromBody] AlertDto alertDto)
 	{
 		try
 		{
 
-			await _alertRepository.UpdateAsync(id, updateAlertDto);
+			await _alertRepository.UpdateAsync(id, alertDto);
 		}
 		catch (DbUpdateConcurrencyException)
 		{

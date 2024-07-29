@@ -29,6 +29,10 @@ namespace LogCollector.Domain.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -69,6 +73,9 @@ namespace LogCollector.Domain.Migrations
                     b.Property<string>("IpAddress")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("LogContent")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LogMessage")
                         .HasColumnType("nvarchar(max)");
 
@@ -100,6 +107,9 @@ namespace LogCollector.Domain.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastInvoke")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");

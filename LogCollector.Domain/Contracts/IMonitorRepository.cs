@@ -2,7 +2,7 @@
 {
 	Task<PagedResult<TResult>> GetAllAsync<TResult>(IMonitorQueryParameters QueryParameters);
 
-	Task<MonitorDto> GetMonitorDetailsAsync(int id);
+	Task<BaseMonitorDto> GetMonitorDetailsAsync(int id);
 
 	new Task DeleteAsync(int id);
 
