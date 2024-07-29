@@ -9,24 +9,24 @@ public class LogEntryRepository : GenericRepository<LogEntry>, ILogEntryReposito
 		
 	}
 
-	public override async Task<PagedResult<TResult>> GetAllAsync<TResult>(QueryParameters queryParameters)
+	public async Task<PagedResult<TResult>> GetAllAsync<TResult>(ILogQueryParameters logQueryParameters)
 	{
 		var totalSize = await _context.Set<LogEntry>().CountAsync();
 		var items = await _context.Set<LogEntry>()
-			.Where(log => !string.IsNullOrEmpty(queryParameters.DeviceId) ? log.DeviceId == queryParameters.DeviceId : true)
-			.Where(log => !string.IsNullOrEmpty(queryParameters.ApplicationName) ? log.ApplicationName == queryParameters.ApplicationName : true)
-			.Where(log => !string.IsNullOrEmpty(queryParameters.IpAddress) ? log.IpAddress == queryParameters.IpAddress : true)
-			.Where(log => !string.IsNullOrEmpty(queryParameters.LogMessage) ? log.LogMessage == queryParameters.LogMessage : true)
-			.Skip(queryParameters.StartIndex)
-			.Take(queryParameters.PageSize)
+			.Where(log => !string.IsNullOrEmpty(logQueryParameters.DeviceId) ? log.DeviceId == logQueryParameters.DeviceId : true)
+			.Where(log => !string.IsNullOrEmpty(logQueryParameters.ApplicationName) ? log.ApplicationName == logQueryParameters.ApplicationName : true)
+			.Where(log => !string.IsNullOrEmpty(logQueryParameters.IpAddress) ? log.IpAddress == logQueryParameters.IpAddress : true)
+			.Where(log => !string.IsNullOrEmpty(logQueryParameters.LogMessage) ? log.LogMessage == logQueryParameters.LogMessage : true)
+			.Skip(logQueryParameters.StartIndex)
+			.Take(logQueryParameters.PageSize)
 			.ProjectTo<TResult>(_mapper.ConfigurationProvider)
 			.ToListAsync();
 
 		return new PagedResult<TResult>
 		{
 			Items = items,
-			PageNumber = queryParameters.PageNumber,
-			RecordNumber = queryParameters.PageSize,
+			PageNumber = logQueryParameters.PageNumber,
+			RecordNumber = logQueryParameters.PageSize,
 			TotalCount = totalSize
 		};
 	}

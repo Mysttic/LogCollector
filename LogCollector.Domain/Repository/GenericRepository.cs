@@ -62,20 +62,20 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 			.ToListAsync();
 	}
 
-	public virtual async Task<PagedResult<TResult>> GetAllAsync<TResult>(QueryParameters queryParameters)
+	public async Task<PagedResult<TResult>> GetAllAsync<TResult>(IQueryParameters QueryParameters)
 	{
 		var totalSize = await _context.Set<T>().CountAsync();
 		var items = await _context.Set<T>()
-			.Skip(queryParameters.StartIndex)
-			.Take(queryParameters.PageSize)
+			.Skip(QueryParameters.StartIndex)
+			.Take(QueryParameters.PageSize)
 			.ProjectTo<TResult>(_mapper.ConfigurationProvider)
 			.ToListAsync();
 
 		return new PagedResult<TResult>
 		{
 			Items = items,
-			PageNumber = queryParameters.PageNumber,
-			RecordNumber = queryParameters.PageSize,
+			PageNumber = QueryParameters.PageNumber,
+			RecordNumber = QueryParameters.PageSize,
 			TotalCount = totalSize
 		};
 	}

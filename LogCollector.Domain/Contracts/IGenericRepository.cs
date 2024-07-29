@@ -8,7 +8,7 @@
 
 	Task<List<TResult>> GetAllAsync<TResult>();
 
-	Task<PagedResult<TResult>> GetAllAsync<TResult>(QueryParameters queryParameters);
+	Task<PagedResult<TResult>> GetAllAsync<TResult>(IQueryParameters QueryParameters);
 
 	Task<T> AddAsync(T entity);
 
