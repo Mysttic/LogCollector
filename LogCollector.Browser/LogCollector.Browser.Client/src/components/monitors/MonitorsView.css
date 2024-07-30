@@ -1,0 +1,45 @@
+.monitor-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    background-color: #f7f7f7; /* Light background for the whole container */
+}
+
+.monitor-list {
+    width: 80%;
+    padding: 20px;
+    border-right: 1px solid #ccc;
+    background-color: #fff; /* White background for the list area */
+}
+
+.monitor-list h2 {
+    color: #333; /* Darker color for the heading */
+    margin-bottom: 20px;
+}
+
+.monitor-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.monitor-list-item {
+    padding: 10px 15px;
+    margin-bottom: 10px; /* Add spacing between items */
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+    .monitor-list-item:hover {
+        background-color: #e0e0e0; /* Change background on hover */
+        border-color: #aaa; /* Change border color on hover */
+    }
+
+.monitor-details {
+    width: 100%;
+    padding: 20px;
+    background-color: #f9f9f9; /* Background color for the details section */
+}

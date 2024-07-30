@@ -26,6 +26,9 @@ const NavMenu = () => {
                     <NavItem>
                         <NavLink href="/logs">Logs</NavLink>
                     </NavItem>
+                    <NavItem>
+                        <NavLink href="/monitors">Monitors</NavLink>
+                    </NavItem>
                 </Nav>
             </Collapse>
         </Navbar>
