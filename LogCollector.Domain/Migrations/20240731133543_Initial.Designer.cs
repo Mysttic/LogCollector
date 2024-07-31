@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LogCollector.Domain.Migrations
 {
     [DbContext(typeof(LogCollectorDbContext))]
-    [Migration("20240729114851_Initial")]
+    [Migration("20240731133543_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

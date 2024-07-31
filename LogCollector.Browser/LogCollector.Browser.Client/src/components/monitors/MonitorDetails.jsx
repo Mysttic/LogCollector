@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './MonitorDetails.css';
 
-const MonitorDetails = ({ monitor, onClose }) => {
+const MonitorDetails = ({ monitor, onClose, fetchMonitors }) => {
     const [editMode, setEditMode] = useState(false);
     const [monitorData, setMonitorData] = useState(monitor);
     const navigate = useNavigate();
@@ -15,8 +15,10 @@ const MonitorDetails = ({ monitor, onClose }) => {
 
     const handleSave = async () => {
         try {
-            await axios.put(`/api/Monitor/${monitor.id}`, monitorData);
+            const response = await axios.put(`/api/Monitor/${monitor.id}`, monitorData);
+            setMonitorData(monitorData);
             setEditMode(false);
+            fetchMonitors(); // Refresh list view
         } catch (error) {
             console.error('Error updating monitor', error);
         }
@@ -30,8 +32,9 @@ const MonitorDetails = ({ monitor, onClose }) => {
     const handleDelete = async () => {
         try {
             await axios.delete(`/api/Monitor/${monitor.id}`);
+            fetchMonitors(); // Refresh list view
             onClose(); // Close details view
-            navigate('/'); // Redirect to list view or update the state
+            navigate('/monitors'); // Redirect to list view or update the state
         } catch (error) {
             console.error('Error deleting monitor', error);
         }
@@ -48,6 +51,12 @@ const MonitorDetails = ({ monitor, onClose }) => {
                         value={monitorData.name}
                         onChange={handleChange}
                     />
+                    <input
+                        type="text"
+                        name="action"
+                        value={monitorData.action}
+                        onChange={handleChange}
+                    />
                     {/* Add more fields as needed */}
                     <button onClick={handleSave}>Save</button>
                     <button onClick={handleCancel}>Cancel</button>
@@ -58,11 +67,11 @@ const MonitorDetails = ({ monitor, onClose }) => {
                             <tbody>
                                 <tr>
                                     <td>Name</td>
-                                    <td><b>{monitor.name}</b></td>
+                                    <td><b>{monitorData.name}</b></td>
                                 </tr>
                                 <tr>
                                     <td>Action</td>
-                                    <td><b>{monitor.action}</b></td>
+                                    <td><b>{monitorData.action}</b></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -33,13 +33,43 @@
     transition: background-color 0.3s, border-color 0.3s;
 }
 
-    .monitor-list-item:hover {
-        background-color: #e0e0e0; /* Change background on hover */
-        border-color: #aaa; /* Change border color on hover */
-    }
+.monitor-list-item:hover {
+    background-color: #e0e0e0; /* Change background on hover */
+    border-color: #aaa; /* Change border color on hover */
+}
 
 .monitor-details {
     width: 100%;
     padding: 20px;
     background-color: #f9f9f9; /* Background color for the details section */
+}
+
+.add-monitor-form {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.add-monitor-form input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+}
+
+.add-monitor-form button {
+    margin-right: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-monitor-form button:hover {
+    background-color: #555;
 }
