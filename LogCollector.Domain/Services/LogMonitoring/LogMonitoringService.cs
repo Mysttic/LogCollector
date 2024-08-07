@@ -32,14 +32,14 @@ public class LogMonitoringService
 			List<LogEntry> monitorLogs = logEntries.AsQueryable().Where(l=>l.CreatedAt > monitor.LastInvoke).Where(monitor.Query).ToList();
 			if (monitorLogs.Count() > 0) // monitor.Threshold) // można na przyszłość dodać jakiś warunek kiedy ma reagować na określoną ilość logów
 			{
-				await HandleMonitoringAlertAsync(monitor, monitorLogs);
+				HandleMonitoringAlert(monitor, monitorLogs);
 			}
 		}
 		await _logCollectorDbContext.SaveChangesAsync();
 
 	}
 
-	public async Task HandleMonitoringAlertAsync(Monitor monitor, List<LogEntry> monitorLogs)
+	public void HandleMonitoringAlert(Monitor monitor, List<LogEntry> monitorLogs)
 	{
 		var alert = new Alert
 		{

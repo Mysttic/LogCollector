@@ -42,12 +42,12 @@ app.UseHttpsRedirection();
 //    app.UseSwaggerUI();
 //}
 
-//var recurringJobManager = app.Services.GetRequiredService<IRecurringJobManager>();
+var recurringJobManager = app.Services.GetRequiredService<IRecurringJobManager>();
 
-//recurringJobManager.AddOrUpdate<LogMonitoringService>(
-//	"Run every minute",
-//	service => service.CheckLogsAsync(),
-//	Cron.Minutely);
+recurringJobManager.AddOrUpdate<LogMonitoringService>(
+	"Run every minute",
+	service => service.CheckLogsAsync(),
+	Cron.Minutely);
 
 
 app.Run();

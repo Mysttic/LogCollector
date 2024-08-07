@@ -1,4 +1,4 @@
-﻿public abstract class LogEntryDto
+﻿public class LogEntryDto
 {
 	public string? DeviceId { get; set; }
 	public string? ApplicationName { get; set; }
