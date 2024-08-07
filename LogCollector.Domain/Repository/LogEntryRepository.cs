@@ -16,6 +16,7 @@ public class LogEntryRepository : GenericRepository<LogEntry>, ILogEntryReposito
 			.Where(log => !string.IsNullOrEmpty(logQueryParameters.DeviceId) ? log.DeviceId == logQueryParameters.DeviceId : true)
 			.Where(log => !string.IsNullOrEmpty(logQueryParameters.ApplicationName) ? log.ApplicationName == logQueryParameters.ApplicationName : true)
 			.Where(log => !string.IsNullOrEmpty(logQueryParameters.IpAddress) ? log.IpAddress == logQueryParameters.IpAddress : true)
+			.Where(log => !string.IsNullOrEmpty(logQueryParameters.LogType) ? log.LogType == logQueryParameters.LogType : true)
 			.Where(log => !string.IsNullOrEmpty(logQueryParameters.LogMessage) ? log.LogMessage == logQueryParameters.LogMessage : true)
 			.Skip(logQueryParameters.StartIndex)
 			.Take(logQueryParameters.PageSize)
