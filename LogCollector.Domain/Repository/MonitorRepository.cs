@@ -13,7 +13,22 @@ public class MonitorRepository : GenericRepository<Monitor>, IMonitorRepository
 	{
 		var totalSize = await _context.Set<Monitor>().Where(m => m.IsActive).CountAsync();
 		var items = await _context.Set<Monitor>()
-			.Where(m => m.IsActive)
+			.Where(m => !string.IsNullOrEmpty(monitorQueryParameters.IsActive)
+				?
+					monitorQueryParameters.IsActive.ToLower() == "true"
+						?
+							m.IsActive
+						:
+							monitorQueryParameters.IsActive.ToLower() == "false"
+							?
+								!m.IsActive
+							:
+							true
+				:
+					true)
+			.Where(m => !string.IsNullOrEmpty(monitorQueryParameters.Name) ? m.Name!.ToLower().Contains(monitorQueryParameters.Name.ToLower()) : true)
+			.Where(m => !string.IsNullOrEmpty(monitorQueryParameters.Action) ? m.Action!.ToLower().Contains(monitorQueryParameters.Action.ToLower()) : true)
+			.Where(m => !string.IsNullOrEmpty(monitorQueryParameters.Query) ? m.Query!.ToLower().Contains(monitorQueryParameters.Query.ToLower()) : true)
 			.Skip(monitorQueryParameters.StartIndex)
 			.Take(monitorQueryParameters.PageSize)
 			.ProjectTo<TResult>(_mapper.ConfigurationProvider)
@@ -31,7 +46,7 @@ public class MonitorRepository : GenericRepository<Monitor>, IMonitorRepository
 	public async Task<BaseMonitorDto> GetMonitorDetailsAsync(int id)
 	{
 		var monitor = await _context.Monitors
-			.Where(m=>m.IsActive)
+			.Where(m => m.IsActive)
 			.Include(m => m.Alerts)
 			.ProjectTo<BaseMonitorDto>(_mapper.ConfigurationProvider)
 			.FirstOrDefaultAsync(m => m.Id == id);
@@ -44,15 +59,4 @@ public class MonitorRepository : GenericRepository<Monitor>, IMonitorRepository
 		return monitor;
 	}
 
-	public async new Task DeleteAsync(int id)
-	{
-		var monitor = await _context.Monitors.FindAsync(id);
-		if (monitor == null)
-		{
-			throw new NotFoundException(nameof(Monitor), id);
-		}
-		monitor.IsActive = false;
-		_context.Monitors.Update(monitor);
-		await _context.SaveChangesAsync();
-	}
 }

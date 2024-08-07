@@ -6,12 +6,15 @@
     position: relative;
 }
 
+.delete-button {
+    background-color: #ff0000;
+}
+
 .monitor-details-view button {
     margin: 5px;
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
-    background-color: #333;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -30,4 +33,27 @@
 
 .monitor-details-view h2 {
     margin-top: 0;
+}
+
+.table-full-width{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.checkbox{
+    margin-right: 10px;
+    height: 20px;
+}
+
+.textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.select {
+        width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
 }

@@ -4,6 +4,4 @@
 
 	Task<BaseMonitorDto> GetMonitorDetailsAsync(int id);
 
-	new Task DeleteAsync(int id);
-
 }

@@ -6,20 +6,37 @@ import './MonitorsView.css';
 const MonitorsView = () => {
     const [monitors, setMonitors] = useState([]);
     const [totalMonitors, setTotalMonitors] = useState(0);
-    const [selectedMonitor, setSelectedMonitor] = useState(null);
+    const [selectedMonitorId, setSelectedMonitorId] = useState(null);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
+    const [filters, setFilters] = useState({
+        isactive: '',
+        name: '',
+        action: '',
+        query: ''
+    });
     const [showAddForm, setShowAddForm] = useState(false);
     const [newMonitor, setNewMonitor] = useState({ name: '', action: '', alerts: [] });
+    const [pendingSelection, setPendingSelection] = useState(false);
 
     useEffect(() => {
         fetchMonitors();
-    }, [page, pageSize]);
+    }, [page, pageSize, filters]);
+
+    useEffect(() => {
+        if (pendingSelection && monitors.length > 0) {
+            handleSelect(monitors[monitors.length - 1].id);
+            setPendingSelection(false);
+        }
+    }, [monitors]);
 
     const fetchMonitors = async () => {
         try {
             const response = await axios.get('/api/Monitor', {
                 params: {
+                    name: filters.name,
+                    action: filters.action,
+                    query: filters.query,
                     pageNumber: page,
                     pageSize: pageSize,
                     startIndex: ((page - 1) * pageSize)
@@ -33,9 +50,17 @@ const MonitorsView = () => {
         }
     };
 
-    const handleSelect = (monitor) => {
-        setSelectedMonitor(monitor);
-        };
+    const handleFilterChange = (e) => {
+        setFilters({ ...filters, [e.target.name]: e.target.value });
+    };
+
+    const handleSelect = (monitorId) => {
+        if (selectedMonitorId === monitorId) {
+            setSelectedMonitorId(null); // Hide details if the same monitor is clicked again
+        } else {
+            setSelectedMonitorId(monitorId); // Show details for the clicked monitor
+        }
+    };
 
     const handlePageChange = (newPage) => {
         setPage(newPage);
@@ -43,15 +68,15 @@ const MonitorsView = () => {
 
     const handleAddMonitor = async () => {
         try {
-            const response = await axios.post('/api/Monitor', newMonitor);
+            await axios.post('/api/Monitor', newMonitor);
             setShowAddForm(false);
             setNewMonitor({ name: '', action: '', alerts: [] });
-            fetchMonitors();
-        }
-        catch (error) {
+            setPendingSelection(true);
+            await fetchMonitors();
+        } catch (error) {
             console.error('Error adding monitor:', error);
         }
-    }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -59,40 +84,59 @@ const MonitorsView = () => {
     };
 
     const handleClose = () => {
-        setSelectedMonitor(null);
+        setSelectedMonitorId(null);
         fetchMonitors();
-    }
-
+    };
 
     console.log("Monitors data:", monitors);
 
     return (
         <div>
-            <h2>Monitors</h2>
-            <button onClick={() => setShowAddForm(true)}>Add Monitor</button> {/* Przycisk do pokazania formularza */}
-            {showAddForm && (
-                <div className="add-monitor-form">
-                    <h3>Add New Monitor</h3>
+            <h2>Monitors</h2>    
+            <div>
+                <div className="div-filter-element">
+                    <select
+                        name="pageSize"
+                        value={pageSize}
+                        onChange={(e) => setPageSize(parseInt(e.target.value))}>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+                <div className="div-filter-element">
                     <input
                         type="text"
                         name="name"
-                        value={newMonitor.name}
-                        onChange={handleChange}
                         placeholder="Name"
+                        value={filters.name}
+                        onChange={handleFilterChange}
                     />
+                </div>
+                <div className="div-filter-element">
                     <input
                         type="text"
-                        name="action"
-                        value={newMonitor.action}
-                        onChange={handleChange}
-                        placeholder="Action"
+                        name="query"
+                        placeholder="Query"
+                        value={filters.query}
+                        onChange={handleFilterChange}
                     />
-                    <button onClick={handleAddMonitor}>Save</button>
-                    <button onClick={() => setShowAddForm(false)}>Cancel</button>
                 </div>
-            )}
-            <div className="monitor-container">
-                <table className="monitor-table">
+                <div className="div-filter-element">
+                    <select
+                        name="action"
+                        value={filters.action}
+                        onChange={handleFilterChange}>
+                        <option value="">All</option>
+                        <option value="NotDefined">NotDefined</option>
+                        <option value="Email">Email</option>
+                        <option value="SMS">SMS</option>
+                    </select>
+                </div>
+                <button onClick={() => handleAddMonitor()}>Add Monitor</button>
+            </div>
+            <div>
+                <table className="table">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -102,22 +146,33 @@ const MonitorsView = () => {
                     </thead>
                     <tbody>
                         {monitors.map((monitor) => (
-                            <tr key={monitor.id} onClick={() => handleSelect(monitor)}>
-                                <td>{monitor.name}</td>
-                                <td>{monitor.action}</td>
-                                <td>{monitor.alerts.length}</td>
-                            </tr>
+                            <React.Fragment key={monitor.id}>
+                                <tr>
+                                    <td>{monitor.name}</td>
+                                    <td>{monitor.action}</td>
+                                    <td>{monitor.alerts.length}</td>
+                                    <td>
+                                        <button onClick={() => handleSelect(monitor.id)}>View Details</button>
+                                    </td>
+                                </tr>
+                                {selectedMonitorId === monitor.id && (
+                                    <tr>
+                                        <td colSpan="4">
+                                            <MonitorDetails monitor={monitor}
+                                                onClose={handleClose}
+                                                fetchMonitors={fetchMonitors}
+                                            />
+
+                                        </td>
+                                    </tr>
+                                )}
+                            </React.Fragment>
                         ))}
                     </tbody>
                 </table>
-                <div className="monitor-details">
-                    {selectedMonitor && (
-                        <MonitorDetails
-                            monitor={selectedMonitor}
-                            onClose={() => handleClose()}
-                            fetchMonitors={fetchMonitors}
-                        />
-                    )}
+                <div>
+                    <button className="button-navigator" onClick={() => handlePageChange(page - 1)} disabled={page === 1}>Previous</button>
+                    <button className="button-navigator" onClick={() => handlePageChange(page + 1)} disabled={page * pageSize >= totalMonitors}>Next</button>
                 </div>
             </div>
         </div>

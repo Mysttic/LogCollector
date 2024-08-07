@@ -16,13 +16,10 @@ const NavMenu = () => {
 
     return (
         <Navbar color="light" light expand="md">
-            <NavbarBrand href="/">MyApp</NavbarBrand>
+            <NavbarBrand href="/">LogCollector</NavbarBrand>
             <NavbarToggler onClick={toggle} />
             <Collapse isOpen={isOpen} navbar>
-                <Nav className="mr-auto" navbar>
-                    <NavItem>
-                        <NavLink href="/">Home</NavLink>
-                    </NavItem>
+                <Nav className="mr-auto" navbar>                    
                     <NavItem>
                         <NavLink href="/logs">Logs</NavLink>
                     </NavItem>

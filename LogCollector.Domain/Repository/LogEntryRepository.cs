@@ -13,11 +13,11 @@ public class LogEntryRepository : GenericRepository<LogEntry>, ILogEntryReposito
 	{
 		var totalSize = await _context.Set<LogEntry>().CountAsync();
 		var items = await _context.Set<LogEntry>()
-			.Where(log => !string.IsNullOrEmpty(logQueryParameters.DeviceId) ? log.DeviceId == logQueryParameters.DeviceId : true)
-			.Where(log => !string.IsNullOrEmpty(logQueryParameters.ApplicationName) ? log.ApplicationName == logQueryParameters.ApplicationName : true)
-			.Where(log => !string.IsNullOrEmpty(logQueryParameters.IpAddress) ? log.IpAddress == logQueryParameters.IpAddress : true)
-			.Where(log => !string.IsNullOrEmpty(logQueryParameters.LogType) ? log.LogType == logQueryParameters.LogType : true)
-			.Where(log => !string.IsNullOrEmpty(logQueryParameters.LogMessage) ? log.LogMessage == logQueryParameters.LogMessage : true)
+			.Where(log => !string.IsNullOrEmpty(logQueryParameters.DeviceId) ? log.DeviceId!.ToLower().Contains(logQueryParameters.DeviceId.ToLower()) : true)
+			.Where(log => !string.IsNullOrEmpty(logQueryParameters.ApplicationName) ? log.ApplicationName!.ToLower().Contains(logQueryParameters.ApplicationName.ToLower()) : true)
+			.Where(log => !string.IsNullOrEmpty(logQueryParameters.IpAddress) ? log.IpAddress!.ToLower().Contains(logQueryParameters.IpAddress.ToLower()) : true)
+			.Where(log => !string.IsNullOrEmpty(logQueryParameters.LogType) ? log.LogType!.ToLower().Contains(logQueryParameters.LogType.ToLower()) : true)
+			.Where(log => !string.IsNullOrEmpty(logQueryParameters.LogMessage) ? log.LogMessage!.ToLower().Contains(logQueryParameters.LogMessage.ToLower()) : true)
 			.Skip(logQueryParameters.StartIndex)
 			.Take(logQueryParameters.PageSize)
 			.ProjectTo<TResult>(_mapper.ConfigurationProvider)
@@ -30,6 +30,11 @@ public class LogEntryRepository : GenericRepository<LogEntry>, ILogEntryReposito
 			RecordNumber = logQueryParameters.PageSize,
 			TotalCount = totalSize
 		};
+	}
+
+	public Task<BaseLogEntryDto> GetLogDetailsAsync(int id)
+	{
+		throw new NotImplementedException();
 	}
 }
 
