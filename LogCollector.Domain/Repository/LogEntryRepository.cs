@@ -18,6 +18,8 @@ public class LogEntryRepository : GenericRepository<LogEntry>, ILogEntryReposito
 			.Where(log => !string.IsNullOrEmpty(logQueryParameters.IpAddress) ? log.IpAddress!.ToLower().Contains(logQueryParameters.IpAddress.ToLower()) : true)
 			.Where(log => !string.IsNullOrEmpty(logQueryParameters.LogType) ? log.LogType!.ToLower().Contains(logQueryParameters.LogType.ToLower()) : true)
 			.Where(log => !string.IsNullOrEmpty(logQueryParameters.LogMessage) ? log.LogMessage!.ToLower().Contains(logQueryParameters.LogMessage.ToLower()) : true)
+			.Where(log => log.CreatedAt >= (logQueryParameters.StartDate.HasValue ? logQueryParameters.StartDate.Value.LocalDateTime : DateTime.MinValue)
+						&& log.CreatedAt <= (logQueryParameters.EndDate.HasValue ? logQueryParameters.EndDate.Value.LocalDateTime.AddDays(1) : DateTime.MaxValue))
 			.Skip(logQueryParameters.StartIndex)
 			.Take(logQueryParameters.PageSize)
 			.ProjectTo<TResult>(_mapper.ConfigurationProvider)
@@ -32,9 +34,5 @@ public class LogEntryRepository : GenericRepository<LogEntry>, ILogEntryReposito
 		};
 	}
 
-	public Task<BaseLogEntryDto> GetLogDetailsAsync(int id)
-	{
-		throw new NotImplementedException();
-	}
 }
 

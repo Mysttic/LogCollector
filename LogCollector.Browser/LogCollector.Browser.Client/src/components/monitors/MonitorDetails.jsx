@@ -8,8 +8,11 @@ const MonitorDetails = ({ monitor, onClose, fetchMonitors }) => {
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setMonitorData({ ...monitorData, [name]: value });
+        const { name, type, checked, value } = e.target;
+        setMonitorData(prevState => ({
+            ...prevState,
+            [name]: type === 'checkbox' ? checked : value
+        }));
     };
 
     const formatDate = (date) => {
@@ -50,7 +53,7 @@ const MonitorDetails = ({ monitor, onClose, fetchMonitors }) => {
                                 className="checkbox"
                                 type="checkbox"
                                 name="isActive"
-                                value={monitorData.isActive}
+                                checked={monitorData.isActive}
                                 onChange={handleChange}
                                 placeholder="IsActive" />
                         </td>

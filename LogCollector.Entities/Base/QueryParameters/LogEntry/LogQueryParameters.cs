@@ -5,5 +5,7 @@
 	public string? IpAddress { get; set; }
 	public string? LogType { get; set; }
 	public string? LogMessage { get; set; }
+	public DateTimeOffset? StartDate { get; set; }
+	public DateTimeOffset? EndDate { get; set; }
 
 }

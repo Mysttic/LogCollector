@@ -34,6 +34,7 @@ const MonitorsView = () => {
         try {
             const response = await axios.get('/api/Monitor', {
                 params: {
+                    isActive: filters.isActive,
                     name: filters.name,
                     action: filters.action,
                     query: filters.query,
@@ -96,6 +97,16 @@ const MonitorsView = () => {
             <div>
                 <div className="div-filter-element">
                     <select
+                        name="isActive"
+                        value={filters.isActive}
+                        onChange={handleFilterChange}>
+                        <option value="">All</option>
+                        <option value="True">Active</option>
+                        <option value="False">Inactive</option>
+                    </select>
+                </div>
+                <div className="div-filter-element">
+                    <select
                         name="pageSize"
                         value={pageSize}
                         onChange={(e) => setPageSize(parseInt(e.target.value))}>
@@ -133,6 +144,7 @@ const MonitorsView = () => {
                         <option value="SMS">SMS</option>
                     </select>
                 </div>
+                <br/>
                 <button onClick={() => handleAddMonitor()}>Add Monitor</button>
             </div>
             <div>
