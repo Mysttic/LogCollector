@@ -112,6 +112,7 @@ const MonitorDetails = ({ monitor, onClose, fetchMonitors }) => {
                                     <option value="NotDefined">NotDefined</option>
                                     <option value="Email">Email</option>
                                     <option value="SMS">SMS</option>
+                                    <option value="CustomApiCall">CustomApiCall</option>
                                 </select>
                         </td>
                     </tr>

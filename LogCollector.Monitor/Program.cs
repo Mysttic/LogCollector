@@ -18,7 +18,9 @@ builder.Services.AddHangfire(config =>
 builder.Services.AddHangfireServer();
 
 builder.Services.AddScoped<LogMonitoringService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddScoped<ISMSService, SMSService>();
+builder.Services.AddHttpClient<ICustomApiCallService, CustomApiCallService>();
 
 builder.AddServiceDefaults();
 

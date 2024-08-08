@@ -142,6 +142,7 @@ const MonitorsView = () => {
                         <option value="NotDefined">NotDefined</option>
                         <option value="Email">Email</option>
                         <option value="SMS">SMS</option>
+                        <option value="CustomApiCall">CustomApiCall</option>
                     </select>
                 </div>
                 <br/>

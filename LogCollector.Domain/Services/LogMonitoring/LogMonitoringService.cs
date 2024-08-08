@@ -10,13 +10,22 @@ public class LogMonitoringService
 	private readonly IConfiguration _configuration;
 	private readonly IBackgroundJobClient _backgroundJobClient;
 	private readonly IEmailService _emailService;
+	private readonly ISMSService _smsService;
+	private readonly ICustomApiCallService _customApiCallService;
 
-	public LogMonitoringService(LogCollectorDbContext logCollectorDbContext, IConfiguration configuration, IBackgroundJobClient backgroundJobClient, IEmailService emailService)
+	public LogMonitoringService(LogCollectorDbContext logCollectorDbContext, 
+		IConfiguration configuration, 
+		IBackgroundJobClient backgroundJobClient, 
+		IEmailService emailService,
+		ISMSService smsService,
+		ICustomApiCallService customApiCallService)
 	{
 		_logCollectorDbContext = logCollectorDbContext;
 		_configuration = configuration;
 		_backgroundJobClient = backgroundJobClient;
 		_emailService = emailService;
+		_smsService = smsService;
+		_customApiCallService = customApiCallService;
 	}
 
 	public async Task CheckLogsAsync()
@@ -50,16 +59,19 @@ public class LogMonitoringService
 		_logCollectorDbContext.Alerts.Add(alert);
 		monitor.LastInvoke = DateTime.Now;
 		_logCollectorDbContext.Monitors.Update(monitor);		
-		_backgroundJobClient.Enqueue(
-			() => _emailService.SendEmailAsync("admin@example.com", "Log Alert", alert.Message));
+		HandleMonitorAlertAction(alert, monitor);
 
 	}
 
 	public void HandleMonitorAlertAction(Alert alert, Monitor monitor)
 	{
-		if(monitor.Action == MonitorAction.SendEmail.ToString())
-			_backgroundJobClient.Enqueue(() => _emailService.SendEmailAsync("admin@example.com", "Log Alert", alert.Message));
-		else if(monitor.Action == MonitorAction.SendSms.ToString())
-			Console.WriteLine("Sending SMS");
+		if (monitor.Action == MonitorAction.SendEmail.ToString())
+			_backgroundJobClient.Enqueue(() => _emailService.SendEmailAsync(alert.Message));
+		else if (monitor.Action == MonitorAction.SendSms.ToString())
+			_backgroundJobClient.Enqueue(() => _smsService.SendSMSAsync(alert.Message));
+		else if (monitor.Action == MonitorAction.CustomApiCall.ToString())
+			_backgroundJobClient.Enqueue(() => _customApiCallService.SendCustomApiCallAsync(alert.Message));
+		else
+			Console.WriteLine($"Unknown action {monitor.Action}");
 	}
 }
