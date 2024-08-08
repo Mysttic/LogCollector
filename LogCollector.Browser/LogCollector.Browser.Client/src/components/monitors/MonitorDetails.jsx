@@ -43,7 +43,7 @@ const MonitorDetails = ({ monitor, onClose, fetchMonitors }) => {
     return (
         <div className="monitor-details-view">
             <div>
-                <table className="table-full-width">
+                <table className="table-full-width">                    
                     <tr>
                         <td>
                             <label>Is active:</label>
@@ -116,6 +116,87 @@ const MonitorDetails = ({ monitor, onClose, fetchMonitors }) => {
                                 </select>
                         </td>
                     </tr>
+                    {monitorData.action === "Email" && (
+                        <>
+                            <tr className="tr-specific-action">
+                                <td>
+                                    <label>Email:</label>
+                                </td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        name="email_Address"
+                                        value={monitorData.email_Address}
+                                        onChange={handleChange}
+                                        placeholder="Email" />
+                                </td>
+                            </tr>
+                            <tr className="tr-specific-action">
+                                <td>
+                                    <label>Subject:</label>
+                                </td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        name="email_Subject"
+                                        value={monitorData.email_Subject}
+                                        onChange={handleChange}
+                                        placeholder="Subject" />
+                                </td>
+                            </tr>
+                        </>
+                    )}
+                    {monitorData.action === "SMS" && (
+                        <>
+                        <tr className="tr-specific-action">
+                                <td>
+                                    <label>Phone number:</label>
+                                </td>
+                                <td>
+                                    <input
+                                        type="tel"
+                                        name="sms_PhoneNumber"
+                                        value={monitorData.sms_PhoneNumber}
+                                        onChange={handleChange}
+                                        placeholder="Phone number"
+                                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}"                                        
+                                    />
+                                </td>
+                            </tr>
+                        </>
+                    )}
+                    {monitorData.action === "CustomApiCall" && (
+                        <>
+                            <tr className="tr-specific-action">
+                                <td>
+                                    <label>Url:</label>
+                                </td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        name="customApiCall_Url"
+                                        value={monitorData.customApiCall_Url}
+                                        onChange={handleChange}
+                                        placeholder="Url"
+                                    />
+                                </td>
+                            </tr>
+                            <tr className="tr-specific-action">
+                                <td>
+                                    <label>AuthKey:</label>
+                                </td>
+                                <td>
+                                    <input
+                                        type="password"
+                                        name="customApiCall_AuthKey"
+                                        value={monitorData.customApiCall_AuthKey}
+                                        onChange={handleChange}
+                                        placeholder="AuthKey"
+                                    />
+                                </td>
+                            </tr>
+                        </>
+                    )}
                     <tr>
                         <td>
                             <label>Last invoke:</label>

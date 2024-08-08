@@ -66,11 +66,11 @@ public class LogMonitoringService
 	public void HandleMonitorAlertAction(Alert alert, Monitor monitor)
 	{
 		if (monitor.Action == MonitorAction.SendEmail.ToString())
-			_backgroundJobClient.Enqueue(() => _emailService.SendEmailAsync(alert.Message));
+			_backgroundJobClient.Enqueue(() => _emailService.SendEmailAsync(monitor.Email_Address, monitor.Email_Subject, alert.Message));
 		else if (monitor.Action == MonitorAction.SendSms.ToString())
-			_backgroundJobClient.Enqueue(() => _smsService.SendSMSAsync(alert.Message));
+			_backgroundJobClient.Enqueue(() => _smsService.SendSMSAsync(monitor.SMS_PhoneNumber, alert.Message));
 		else if (monitor.Action == MonitorAction.CustomApiCall.ToString())
-			_backgroundJobClient.Enqueue(() => _customApiCallService.SendCustomApiCallAsync(alert.Message));
+			_backgroundJobClient.Enqueue(() => _customApiCallService.SendCustomApiCallAsync(monitor.CustomApiCall_Url, monitor.CustomApiCall_AuthKey, alert.Message));
 		else
 			Console.WriteLine($"Unknown action {monitor.Action}");
 	}

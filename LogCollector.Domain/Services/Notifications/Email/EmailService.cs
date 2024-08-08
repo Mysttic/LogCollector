@@ -12,13 +12,10 @@ public class EmailService : IEmailService
 		_configuration = configuration;
 	}
 
-	public async Task SendEmailAsync(string message)
+	public async Task SendEmailAsync(string address, string subject, string message)
 	{
-		string email = _configuration["SendGrid:ToEmail"] ?? "admin@logcollector.com";
-		string subject = _configuration["SendGrid:Subject"] ?? "Log Alert";
-
-		Console.WriteLine($"Sending email to {email} with subject {subject} and message {message}");
-		await SendEmailWithSendGridAsync(email, subject, message);
+		Console.WriteLine($"Sending email to {address} with subject {subject} and message {message}");
+		await SendEmailWithSendGridAsync(address, subject, message);
 	}
 
 	private async Task SendEmailWithSendGridAsync(string email, string subject, string message)

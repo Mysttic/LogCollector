@@ -12,25 +12,23 @@ public class SMSService : ISMSService
 		_configuration = configuration;
 	}
 
-	public async Task SendSMSAsync(string message)
+	public async Task SendSMSAsync(string phoneNumber, string message)
 	{
-		string phoneNumber = _configuration["Twilio:PhoneNumber"] ?? "0";
-		string from = _configuration["Twilio:From"] ?? "LogCollector Alert";
-
-		Console.WriteLine($"Sending SMS to {phoneNumber} from {from} with message {message}");
-		await SendSMSWithTwilioAsync(phoneNumber, from, message);
+		Console.WriteLine($"Sending SMS to {phoneNumber} with message {message}");
+		await SendSMSWithTwilioAsync(phoneNumber, message);
 	}
 
-	private async Task SendSMSWithTwilioAsync(string phoneNumber, string from, string message)
+	private async Task SendSMSWithTwilioAsync(string phoneNumber, string message)
 	{
 		var accountSid = _configuration["Twilio:AccountSid"];
 		var authToken = _configuration["Twilio:AuthToken"];
+		var fromeNumber = _configuration["Twilio:FromNumber"];
 
 		TwilioClient.Init(accountSid, authToken);
 
 		var messageOptions = new CreateMessageOptions(new PhoneNumber(phoneNumber))
 		{
-			From = new PhoneNumber(from),
+			From = fromeNumber,
 			Body = message
 		};
 

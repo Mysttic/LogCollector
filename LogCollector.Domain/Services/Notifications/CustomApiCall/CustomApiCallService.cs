@@ -12,17 +12,10 @@ public class CustomApiCallService : ICustomApiCallService
 		_httpClient = httpClient;
 	}
 
-	public async Task SendCustomApiCallAsync(string message)
+	public async Task SendCustomApiCallAsync(string? url, string? authKey, string message)
 	{
-		string url = _configuration["CustomApiCall:Url"] ?? "";
-		string authKey = _configuration["CustomApiCall:AuthKey"] ?? "";
-
 		Console.WriteLine($"Sending custom api call to {url} with authKey {authKey} and message {message}");
-		await SendCustomApiCallAsync(url, authKey, message);
-	}
 
-	private async Task SendCustomApiCallAsync(string? url, string? authKey, string message)
-	{
 		if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(authKey))
 		{
 			throw new ArgumentException("URL and AuthKey must be provided");

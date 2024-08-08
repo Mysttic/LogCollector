@@ -1,4 +1,4 @@
 ﻿public interface ICustomApiCallService
 {
-	Task SendCustomApiCallAsync(string message);
+	Task SendCustomApiCallAsync(string url, string authkey, string message);
 }
