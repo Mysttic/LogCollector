@@ -10,6 +10,8 @@ LogCollector is a tool that allows you to aggregate logs from different applicat
 The solution also includes the ability to define monitors that will check logs according to the conditions you specify and perform the appropriate action in the event of an occurrence.
 
 1. [Technical specification](docs/techspec.md#General)
+   
+
 
 
 
