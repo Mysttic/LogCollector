@@ -1,4 +1,6 @@
-### LogCollector Service
+<<< [Technical specification](techspec.md)
+
+## LogCollector Service
 
 Backend module used to receive logs and store them in the database.
 
