@@ -6,7 +6,6 @@ public class MonitorRepository : GenericRepository<Monitor>, IMonitorRepository
 {
 	public MonitorRepository(LogCollectorDbContext context, IMapper mapper) : base(context, mapper)
 	{
-
 	}
 
 	public async Task<PagedResult<TResult>> GetAllAsync<TResult>(IMonitorQueryParameters monitorQueryParameters)
@@ -58,5 +57,4 @@ public class MonitorRepository : GenericRepository<Monitor>, IMonitorRepository
 
 		return monitor;
 	}
-
 }

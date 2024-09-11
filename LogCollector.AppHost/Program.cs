@@ -13,13 +13,12 @@ var backend = builder.AddProject<Projects.LogCollector_Browser_Server>("logcolle
 var frontend = builder.AddNpmApp("frontend",
 	@"../LogCollector.Browser/LogCollector.Browser.Client",
 	"dev")
-	.WithReference(backend)	
+	.WithReference(backend)
 	.WithEndpoint(
 	targetPort: 5173,
 	port: 5173,
 	isProxied: false,
-	scheme : "https",
+	scheme: "https",
 	env: "PORT");
-
 
 builder.Build().Run();

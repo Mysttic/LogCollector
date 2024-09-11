@@ -21,4 +21,3 @@ public class LogCollectorDbContext : DbContext
 			.OnDelete(DeleteBehavior.Cascade);
 	}
 }
-

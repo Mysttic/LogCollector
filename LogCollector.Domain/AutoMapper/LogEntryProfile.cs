@@ -14,6 +14,5 @@ public class LogEntryProfile : Profile
 		CreateMap<AlertDto, Alert>().ReverseMap();
 		CreateMap<AlertDto, Alert>().ReverseMap();
 		CreateMap<BaseAlertDto, Alert>().ReverseMap();
-
 	}
 }

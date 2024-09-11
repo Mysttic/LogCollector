@@ -13,9 +13,9 @@ public class LogMonitoringService
 	private readonly ISMSService _smsService;
 	private readonly ICustomApiCallService _customApiCallService;
 
-	public LogMonitoringService(LogCollectorDbContext logCollectorDbContext, 
-		IConfiguration configuration, 
-		IBackgroundJobClient backgroundJobClient, 
+	public LogMonitoringService(LogCollectorDbContext logCollectorDbContext,
+		IConfiguration configuration,
+		IBackgroundJobClient backgroundJobClient,
 		IEmailService emailService,
 		ISMSService smsService,
 		ICustomApiCallService customApiCallService)
@@ -30,7 +30,7 @@ public class LogMonitoringService
 
 	public async Task CheckLogsAsync()
 	{
-		List<LogEntry> logEntries = await _logCollectorDbContext.Logs.AsNoTracking().ToListAsync();
+		List<LogEntry> logEntries = await _logCollectorDbContext.Logs.AsNoTracking().ToListAsync(); //TODO: może tu wystąpić problem z dużą ilością logów, trzeba to zoptymalizować np. dodając jakieś ograniczenie lub cache
 		if (logEntries.Count == 0)
 		{
 			Console.WriteLine("No logs to check");
@@ -38,14 +38,13 @@ public class LogMonitoringService
 		}
 		foreach (Monitor monitor in _logCollectorDbContext.Monitors.AsNoTracking().Where(m => !string.IsNullOrEmpty(m.Query)))
 		{
-			List<LogEntry> monitorLogs = logEntries.AsQueryable().Where(l=>l.CreatedAt > monitor.LastInvoke).Where(monitor.Query).ToList();
-			if (monitorLogs.Count() > 0) // monitor.Threshold) // można na przyszłość dodać jakiś warunek kiedy ma reagować na określoną ilość logów
+			List<LogEntry> monitorLogs = logEntries.AsQueryable().Where(l => l.CreatedAt > monitor.LastInvoke).Where(monitor.Query).ToList();
+			if (monitorLogs.Count() > 0) // monitor.Threshold) // TODO: można na przyszłość dodać jakiś warunek kiedy ma reagować na określoną ilość logów
 			{
 				HandleMonitoringAlert(monitor, monitorLogs);
 			}
 		}
 		await _logCollectorDbContext.SaveChangesAsync();
-
 	}
 
 	public void HandleMonitoringAlert(Monitor monitor, List<LogEntry> monitorLogs)
@@ -58,9 +57,8 @@ public class LogMonitoringService
 		};
 		_logCollectorDbContext.Alerts.Add(alert);
 		monitor.LastInvoke = DateTime.Now;
-		_logCollectorDbContext.Monitors.Update(monitor);		
+		_logCollectorDbContext.Monitors.Update(monitor);
 		HandleMonitorAlertAction(alert, monitor);
-
 	}
 
 	public void HandleMonitorAlertAction(Alert alert, Monitor monitor)

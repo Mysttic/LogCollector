@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -24,4 +23,3 @@ public class LogEntryController : Controller
 		return Ok(new { pagedLogEntryResult.TotalCount, pagedLogEntryResult });
 	}
 }
-

@@ -43,13 +43,13 @@ const MonitorDetails = ({ monitor, onClose, fetchMonitors }) => {
     return (
         <div className="monitor-details-view">
             <div>
-                <table className="table-full-width">                    
+                <table className="table-full-width">
                     <tr>
                         <td>
                             <label>Is active:</label>
                         </td>
                         <td>
-                            <input 
+                            <input
                                 className="checkbox"
                                 type="checkbox"
                                 name="isActive"
@@ -159,7 +159,7 @@ const MonitorDetails = ({ monitor, onClose, fetchMonitors }) => {
                                         value={monitorData.sms_PhoneNumber}
                                         onChange={handleChange}
                                         placeholder="Phone number"
-                                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}"                                        
+                                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}"
                                     />
                                 </td>
                             </tr>
@@ -222,7 +222,7 @@ const MonitorDetails = ({ monitor, onClose, fetchMonitors }) => {
                         </td>
                     </tr>
                 </table>
-                    
+
                 <button onClick={handleSave}>Save</button>
                 <button onClick={onClose}>Cancel</button>
             </div>

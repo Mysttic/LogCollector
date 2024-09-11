@@ -6,7 +6,6 @@ public class LogEntryRepository : GenericRepository<LogEntry>, ILogEntryReposito
 {
 	public LogEntryRepository(LogCollectorDbContext context, IMapper mapper) : base(context, mapper)
 	{
-		
 	}
 
 	public async Task<PagedResult<TResult>> GetAllAsync<TResult>(ILogQueryParameters logQueryParameters)
@@ -33,6 +32,4 @@ public class LogEntryRepository : GenericRepository<LogEntry>, ILogEntryReposito
 			TotalCount = totalSize
 		};
 	}
-
 }
-

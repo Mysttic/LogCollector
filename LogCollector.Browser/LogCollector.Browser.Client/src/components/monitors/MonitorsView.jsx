@@ -93,7 +93,7 @@ const MonitorsView = () => {
 
     return (
         <div>
-            <h2>Monitors</h2>    
+            <h2>Monitors</h2>
             <div>
                 <div className="div-filter-element">
                     <select

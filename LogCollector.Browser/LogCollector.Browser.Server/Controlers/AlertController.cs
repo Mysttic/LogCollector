@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,14 +11,14 @@ public class AlertController : ControllerBase
 	private readonly IMapper _mapper;
 	private readonly IAlertRepository _alertRepository;
 
-    public AlertController(IMapper mapper, IAlertRepository alertRepository )
-    {
-        _mapper = mapper;
+	public AlertController(IMapper mapper, IAlertRepository alertRepository)
+	{
+		_mapper = mapper;
 		_alertRepository = alertRepository;
-    }
+	}
 
-    // GET: api/<AlertController>
-    [HttpGet]
+	// GET: api/<AlertController>
+	[HttpGet]
 	public async Task<ActionResult<PagedResult<BaseAlertDto>>> GetPagedAlerts(
 		[FromQuery] AlertQueryParameters alertQueryParameters)
 	{
@@ -42,9 +41,8 @@ public class AlertController : ControllerBase
 	public async Task<IActionResult> PostAlert([FromBody] AlertDto alertDto)
 	{
 		var alert = await _alertRepository.AddAsync<AlertDto, Alert>(alertDto);
-		
-		return Created($"/api/Alert/{alert.Id}", alert);
 
+		return Created($"/api/Alert/{alert.Id}", alert);
 	}
 
 	// PUT api/<AlertController>/5
@@ -53,7 +51,6 @@ public class AlertController : ControllerBase
 	{
 		try
 		{
-
 			await _alertRepository.UpdateAsync(id, alertDto);
 		}
 		catch (DbUpdateConcurrencyException)

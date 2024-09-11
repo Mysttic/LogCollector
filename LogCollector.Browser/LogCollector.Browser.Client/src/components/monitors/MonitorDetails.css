@@ -20,9 +20,9 @@
     transition: background-color 0.3s;
 }
 
-.monitor-details-view button:hover {
-    background-color: #555;
-}
+    .monitor-details-view button:hover {
+        background-color: #555;
+    }
 
 .monitor-details-view input {
     width: 100%;
@@ -35,12 +35,12 @@
     margin-top: 0;
 }
 
-.table-full-width{
+.table-full-width {
     width: 100%;
     border-collapse: collapse;
 }
 
-.checkbox{
+.checkbox {
     margin-right: 10px;
     height: 20px;
 }
@@ -53,12 +53,12 @@
 }
 
 .select {
-        width: 100%;
+    width: 100%;
     padding: 10px;
     box-sizing: border-box;
 }
 
 .tr-specific-action {
     background-color: ghostwhite;
-    border:2px solid lightgray;
+    border: 2px solid lightgray;
 }

@@ -10,6 +10,7 @@
 
 	//EmailMonitor
 	public string? Email_Address { get; set; }
+
 	public string? Email_Subject { get; set; }
 
 	//SMS
@@ -17,5 +18,6 @@
 
 	//CustomApiCall
 	public string? CustomApiCall_Url { get; set; }
+
 	public string? CustomApiCall_AuthKey { get; set; }
 }

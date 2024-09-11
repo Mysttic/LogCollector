@@ -43,7 +43,6 @@ public class MonitorController : ControllerBase
 		var monitor = await _monitorRepository.AddAsync<MonitorDto, Monitor>(monitorDto);
 
 		return Created($"/api/Monitor/{monitor.Id}", monitor);
-
 	}
 
 	// PUT api/<MonitorController>/5

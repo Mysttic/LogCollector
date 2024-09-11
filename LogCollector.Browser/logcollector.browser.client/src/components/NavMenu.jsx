@@ -19,7 +19,7 @@ const NavMenu = () => {
             <NavbarBrand href="/">LogCollector</NavbarBrand>
             <NavbarToggler onClick={toggle} />
             <Collapse isOpen={isOpen} navbar>
-                <Nav className="mr-auto" navbar>                    
+                <Nav className="mr-auto" navbar>
                     <NavItem>
                         <NavLink href="/logs">Logs</NavLink>
                     </NavItem>

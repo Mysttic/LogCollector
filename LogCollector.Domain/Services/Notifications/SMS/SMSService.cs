@@ -39,7 +39,7 @@ public class SMSService : ISMSService
 			throw new Exception($"Failed to send SMS. Error code: {msg.ErrorCode}");
 		}
 		else
-			{
+		{
 			Console.WriteLine($"SMS sent: {msg.Sid}");
 		}
 	}
