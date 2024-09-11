@@ -9,6 +9,11 @@ builder.Services.AddDbContext<LogCollectorDbContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+	builder.Configuration.GetSection("Redis").Bind(options);
+});
+
 builder.Services.AddScoped<ILogEntryRepository, LogEntryRepository>();
 builder.Services.AddScoped<IAlertRepository, AlertRepository>();
 builder.Services.AddScoped<IMonitorRepository, MonitorRepository>();

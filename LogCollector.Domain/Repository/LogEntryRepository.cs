@@ -1,15 +1,26 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 
 public class LogEntryRepository : GenericRepository<LogEntry>, ILogEntryRepository
 {
-	public LogEntryRepository(LogCollectorDbContext context, IMapper mapper) : base(context, mapper)
+	public LogEntryRepository(LogCollectorDbContext context, IMapper mapper, IDistributedCache cache) : base(context, mapper, cache)
 	{
 	}
 
 	public async Task<PagedResult<TResult>> GetAllAsync<TResult>(ILogQueryParameters logQueryParameters)
 	{
+		string cacheKey = GenerateCacheKey(logQueryParameters);
+		string? cachedData = await _cache.GetStringAsync(cacheKey);
+
+		if (!string.IsNullOrEmpty(cachedData))
+		{
+			PagedResult<TResult>? cachedResult = JsonConvert.DeserializeObject<PagedResult<TResult>>(cachedData);
+			return cachedResult ?? new PagedResult<TResult>();
+		}
+
 		var totalSize = await _context.Set<LogEntry>().CountAsync();
 		var items = await _context.Set<LogEntry>()
 			.Where(log => !string.IsNullOrEmpty(logQueryParameters.DeviceId) ? log.DeviceId!.ToLower().Contains(logQueryParameters.DeviceId.ToLower()) : true)
@@ -24,12 +35,31 @@ public class LogEntryRepository : GenericRepository<LogEntry>, ILogEntryReposito
 			.ProjectTo<TResult>(_mapper.ConfigurationProvider)
 			.ToListAsync();
 
-		return new PagedResult<TResult>
+		PagedResult<TResult> result = new PagedResult<TResult>
 		{
 			Items = items,
 			PageNumber = logQueryParameters.PageNumber,
 			RecordNumber = logQueryParameters.PageSize,
 			TotalCount = totalSize
 		};
+
+		string serializedResult = JsonConvert.SerializeObject(result);
+		await _cache.SetStringAsync(cacheKey, serializedResult, new DistributedCacheEntryOptions
+		{
+			AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+		});
+
+		return result;
 	}
+
+	private string GenerateCacheKey(ILogQueryParameters logQueryParameters)
+	{
+		// Użyj tylko daty z wartości StartDate i EndDate (jeśli są podane)
+		var startDate = logQueryParameters.StartDate.HasValue ? logQueryParameters.StartDate.Value.Date.ToString("yyyy-MM-dd") : "NoStartDate";
+		var endDate = logQueryParameters.EndDate.HasValue ? logQueryParameters.EndDate.Value.Date.ToString("yyyy-MM-dd") : "NoEndDate";
+
+		// Generowanie klucza z wykorzystaniem DeviceId, ApplicationName, IpAddress itp.
+		return $"{logQueryParameters.DeviceId}-{logQueryParameters.ApplicationName}-{logQueryParameters.IpAddress}-{logQueryParameters.LogType}-{startDate}-{endDate}-{logQueryParameters.PageNumber}-{logQueryParameters.PageSize}";
+	}
+
 }

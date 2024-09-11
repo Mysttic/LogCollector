@@ -1,16 +1,19 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
 	protected readonly LogCollectorDbContext _context;
 	protected readonly IMapper _mapper;
+	protected readonly IDistributedCache _cache;
 
-	public GenericRepository(LogCollectorDbContext context, IMapper mapper)
+	public GenericRepository(LogCollectorDbContext context, IMapper mapper, IDistributedCache cache)
 	{
 		_context = context;
 		_mapper = mapper;
+		_cache = cache;
 	}
 
 	public async Task<T> AddAsync(T entity)
@@ -107,5 +110,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 	{
 		var entity = await GetAsync(id);
 		return entity != null;
+	}
+
+	public string GenerateCacheKey(IQueryParameters queryParameters)
+	{
+		return $"{queryParameters.StartIndex}-{queryParameters.PageNumber}-{queryParameters.PageSize}";
 	}
 }

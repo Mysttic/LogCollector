@@ -21,4 +21,6 @@
 	Task UpdateAsync<TSource>(int id, TSource entity);
 
 	Task<bool> ExistsAsync(int id);
+
+	string GenerateCacheKey(IQueryParameters queryParameters);
 }
