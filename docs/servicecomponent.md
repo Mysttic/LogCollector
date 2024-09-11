@@ -20,8 +20,11 @@ and specify whether they want to use them in their configuration.
 
 Example of how to send logs for solution:
 
-url: https://localhost:7267/api/LogEntry
-body: 
+#### url: 
+```
+https://localhost:7267/api/LogEntry
+````
+#### body: 
 ```
 {
     "deviceId": "Device01",
