@@ -1,0 +1,79 @@
+.alert-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    background-color: #f7f7f7; /* Light background for the whole container */
+}
+
+.alert-list {
+    width: 80%;
+    padding: 20px;
+    border-right: 1px solid #ccc;
+    background-color: #fff; /* White background for the list area */
+}
+
+    .alert-list h2 {
+        color: #333; /* Darker color for the heading */
+        margin-bottom: 20px;
+    }
+
+    .alert-list ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+.alert-list-item {
+    padding: 10px 15px;
+    margin-bottom: 10px; /* Add spacing between items */
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+    .alert-list-item:hover {
+        background-color: #e0e0e0; /* Change background on hover */
+        border-color: #aaa; /* Change border color on hover */
+    }
+
+.alert-details {
+    width: 100%;
+    padding: 20px;
+    background-color: #f9f9f9; /* Background color for the details section */
+}
+
+.add-alert-form {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+    .add-alert-form input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        box-sizing: border-box;
+    }
+
+    .add-alert-form button {
+        margin-right: 10px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #333;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .add-alert-form button:hover {
+            background-color: #555;
+        }
+
+.fullwidth {
+    width: 100%;
+}
