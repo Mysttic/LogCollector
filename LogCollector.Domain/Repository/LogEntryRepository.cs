@@ -1,19 +1,18 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 
 public class LogEntryRepository : GenericRepository<LogEntry>, ILogEntryRepository
 {
-	public LogEntryRepository(LogCollectorDbContext context, IMapper mapper, IDistributedCache cache) : base(context, mapper, cache)
+	public LogEntryRepository(LogCollectorDbContext context, IMapper mapper, ILoggerCacheService cache) : base(context, mapper, cache)
 	{
 	}
 
 	public async Task<PagedResult<TResult>> GetAllAsync<TResult>(ILogQueryParameters logQueryParameters)
 	{
 		string cacheKey = GenerateCacheKey(logQueryParameters);
-		string? cachedData = await _cache.GetStringAsync(cacheKey);
+		string? cachedData = await _cache.TryGetStringAsync(cacheKey);
 
 		if (!string.IsNullOrEmpty(cachedData))
 		{
@@ -44,10 +43,7 @@ public class LogEntryRepository : GenericRepository<LogEntry>, ILogEntryReposito
 		};
 
 		string serializedResult = JsonConvert.SerializeObject(result);
-		await _cache.SetStringAsync(cacheKey, serializedResult, new DistributedCacheEntryOptions
-		{
-			AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
-		});
+		await _cache.TrySetStringAsync(cacheKey, serializedResult);
 
 		return result;
 	}

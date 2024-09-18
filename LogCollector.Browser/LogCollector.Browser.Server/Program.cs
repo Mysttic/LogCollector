@@ -17,6 +17,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.AddScoped<ILogEntryRepository, LogEntryRepository>();
 builder.Services.AddScoped<IAlertRepository, AlertRepository>();
 builder.Services.AddScoped<IMonitorRepository, MonitorRepository>();
+builder.Services.AddScoped<ILoggerCacheService, LoggerCacheService>();
 
 builder.Services.AddCors(options =>
 {

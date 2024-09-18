@@ -1,19 +1,18 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 
 public class AlertRepository : GenericRepository<Alert>, IAlertRepository
 {
-	public AlertRepository(LogCollectorDbContext context, IMapper mapper, IDistributedCache cache) : base(context, mapper, cache)
+	public AlertRepository(LogCollectorDbContext context, IMapper mapper, ILoggerCacheService cache) : base(context, mapper, cache)
 	{
 	}
 
 	public async Task<PagedResult<TResult>> GetAllAsync<TResult>(IAlertQueryParameters alertQueryParameters)
 	{
 		string cacheKey = GenerateCacheKey(alertQueryParameters);
-		string? cachedData = await _cache.GetStringAsync(cacheKey);
+		string? cachedData = await _cache.TryGetStringAsync(cacheKey);
 
 		if (!string.IsNullOrEmpty(cachedData))
 		{
@@ -40,10 +39,7 @@ public class AlertRepository : GenericRepository<Alert>, IAlertRepository
 		};
 
 		string serializedResult = JsonConvert.SerializeObject(result);
-		await _cache.SetStringAsync(cacheKey, serializedResult, new DistributedCacheEntryOptions
-		{
-			AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
-		});
+		await _cache.TrySetStringAsync(cacheKey, serializedResult);
 
 		return result;
 	}
@@ -51,7 +47,7 @@ public class AlertRepository : GenericRepository<Alert>, IAlertRepository
 	public async Task<BaseAlertDto> GetAlertDetailsAsync(int id)
 	{
 		string cacheKey = $"Alert-{id}";
-		string? cachedData = await _cache.GetStringAsync(cacheKey);
+		string? cachedData = await _cache.TryGetStringAsync(cacheKey);
 
 		if (!string.IsNullOrEmpty(cachedData))
 		{
@@ -70,10 +66,7 @@ public class AlertRepository : GenericRepository<Alert>, IAlertRepository
 		}
 
 		string serializedResult = JsonConvert.SerializeObject(alert);
-		await _cache.SetStringAsync(cacheKey, serializedResult, new DistributedCacheEntryOptions
-		{
-			AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
-		});
+		await _cache.TrySetStringAsync(cacheKey, serializedResult);
 
 		return alert;
 	}

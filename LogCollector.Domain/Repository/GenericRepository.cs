@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
 	protected readonly LogCollectorDbContext _context;
 	protected readonly IMapper _mapper;
-	protected readonly IDistributedCache _cache;
+	protected readonly ILoggerCacheService _cache;
 
-	public GenericRepository(LogCollectorDbContext context, IMapper mapper, IDistributedCache cache)
+	public GenericRepository(LogCollectorDbContext context, IMapper mapper, ILoggerCacheService cache)
 	{
 		_context = context;
 		_mapper = mapper;
