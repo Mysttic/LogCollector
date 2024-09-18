@@ -42,6 +42,7 @@ const MonitorDetails = ({ monitor, onClose, fetchMonitors }) => {
 
     return (
         <div className="monitor-details-view">
+            {/* Monitor Details */}
             <div>
                 <table className="table-full-width">
                     <tr>
@@ -222,28 +223,43 @@ const MonitorDetails = ({ monitor, onClose, fetchMonitors }) => {
                         </td>
                     </tr>
                 </table>
-
-                <button onClick={handleSave}>Save</button>
-                <button onClick={onClose}>Cancel</button>
             </div>
-            <h4>Alerts</h4>
-            <table>
+            {/* Alerts */}
+            <br/>
+            <h4 class="alerts-header">Alerts<a href={`/alerts?monitorId=${monitor.id}`} class="alerts-more">view all</a></h4>
+            <table width="100%">
                 <thead>
                     <tr>
                         <th>Message</th>
+                        <th>Content</th>
                         <th>Created At</th>
                     </tr>
                 </thead>
                 <tbody>
                     {monitor.alerts.map((alert) => (
                         <tr key={alert.id}>
-                            <td>{alert.message}</td>
-                            <td>{alert.createdAt}</td>
+                            <td>{alert.message.length > 50 ? `${alert.message.substring(0, 50)}...` : alert.message}</td>
+                            <td>{alert.content.length > 50 ? `${alert.content.substring(0, 50)}...` : alert.content}</td>
+                            <td>{formatDate(alert.createdAt)}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            <button onClick={handleDelete} className="delete-button">Delete</button>
+            {/* Actions */}
+            <br/>
+            <div>
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <button onClick={handleSave}>Save</button>
+                            <button onClick={onClose}>Cancel</button>
+                        </td>
+                        <td>
+                            <button onClick={handleDelete} className="delete-button">Delete</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     );
 };

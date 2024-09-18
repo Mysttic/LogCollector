@@ -62,3 +62,12 @@
     background-color: ghostwhite;
     border: 2px solid lightgray;
 }
+
+.alerts-header {
+    display: inline;
+}
+
+.alerts-more {
+    font-size: 14px;
+    margin-left: 10px;
+}

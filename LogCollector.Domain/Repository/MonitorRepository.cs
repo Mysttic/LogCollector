@@ -70,8 +70,27 @@ public class MonitorRepository : GenericRepository<Monitor>, IMonitorRepository
 
 		var monitor = await _context.Monitors
 			.Where(m => m.IsActive)
-			.Include(m => m.Alerts)
-			.ProjectTo<BaseMonitorDto>(_mapper.ConfigurationProvider)
+			.Select(m => new BaseMonitorDto
+			{
+				Id = m.Id,
+				Name = m.Name,
+				Description = m.Description,
+				IsActive = m.IsActive,
+				LastInvoke = m.LastInvoke,
+				Alerts = m.Alerts
+			.OrderByDescending(a => a.CreatedAt)
+			.Take(10)
+			.Select(a => new BaseAlertDto
+			{
+				Message = a.Message,
+				Content = a.Content,
+				MonitorId = a.MonitorId,
+				CreatedAt = a.CreatedAt,
+				UpdatedAt = a.UpdatedAt,
+				Id = a.Id
+			})
+			.ToList()
+			})
 			.FirstOrDefaultAsync(m => m.Id == id);
 
 		if (monitor == null)
