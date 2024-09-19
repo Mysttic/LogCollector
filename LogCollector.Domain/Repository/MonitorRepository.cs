@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 public class MonitorRepository : GenericRepository<Monitor>, IMonitorRepository
 {
@@ -9,66 +8,48 @@ public class MonitorRepository : GenericRepository<Monitor>, IMonitorRepository
 	{
 	}
 
-	public async Task<PagedResult<TResult>> GetAllAsync<TResult>(IMonitorQueryParameters monitorQueryParameters)
+	public async Task<PagedResult<TResult>> GetAllAsync<TResult>(IMonitorQueryParameters monitorQueryParameters) where TResult : BaseMonitorDto
 	{
-		string cacheKey = GenerateCacheKey(monitorQueryParameters);
-		string? cachedData = await _cache.TryGetStringAsync(cacheKey);
-
-		if (!string.IsNullOrEmpty(cachedData))
+		List<TResult>? items = await _cache.TryGetResultAsync<List<TResult>>(_cacheKey);
+		if (items == null)
 		{
-			PagedResult<TResult>? cachedResult = JsonConvert.DeserializeObject<PagedResult<TResult>>(cachedData);
-			return cachedResult ?? new PagedResult<TResult>();
+			items = await _context.Set<Monitor>()
+				.Where(m => m.IsActive)
+				.ProjectTo<TResult>(_mapper.ConfigurationProvider)
+				.ToListAsync();
+
+			await _cache.TrySetResultAsync(_cacheKey, items);
 		}
 
-		var totalSize = await _context.Set<Monitor>().Where(m => m.IsActive).CountAsync();
-		var items = await _context.Set<Monitor>()
-			.Where(m => !string.IsNullOrEmpty(monitorQueryParameters.IsActive)
-				?
-					monitorQueryParameters.IsActive.ToLower() == "true"
-						?
-							m.IsActive
-						:
-							monitorQueryParameters.IsActive.ToLower() == "false"
-							?
-								!m.IsActive
-							:
-							true
-				:
-					true)
-			.Where(m => !string.IsNullOrEmpty(monitorQueryParameters.Name) ? m.Name!.ToLower().Contains(monitorQueryParameters.Name.ToLower()) : true)
-			.Where(m => !string.IsNullOrEmpty(monitorQueryParameters.Action) ? m.Action!.ToLower().Contains(monitorQueryParameters.Action.ToLower()) : true)
-			.Where(m => !string.IsNullOrEmpty(monitorQueryParameters.Query) ? m.Query!.ToLower().Contains(monitorQueryParameters.Query.ToLower()) : true)
-			.Skip(monitorQueryParameters.StartIndex)
-			.Take(monitorQueryParameters.PageSize)
-			.ProjectTo<TResult>(_mapper.ConfigurationProvider)
-			.ToListAsync();
+		List<TResult> filteredItems = items
+				.Where(m => string.IsNullOrEmpty(monitorQueryParameters.IsActive) ||
+					(monitorQueryParameters.IsActive.ToLower() == "true" && m.IsActive) ||
+					(monitorQueryParameters.IsActive.ToLower() == "false" && !m.IsActive))
+				.Where(m => string.IsNullOrEmpty(monitorQueryParameters.Name) || m.Name!.ToLower().Contains(monitorQueryParameters.Name.ToLower()))
+				.Where(m => string.IsNullOrEmpty(monitorQueryParameters.Action) || m.Action!.ToLower().Contains(monitorQueryParameters.Action.ToLower()))
+				.Where(m => string.IsNullOrEmpty(monitorQueryParameters.Query) || m.Query!.ToLower().Contains(monitorQueryParameters.Query.ToLower()))
+				.Skip(monitorQueryParameters.StartIndex)
+				.Take(monitorQueryParameters.PageSize)
+				.ToList();
 
 		PagedResult<TResult> result = new PagedResult<TResult>
 		{
-			Items = items,
+			Items = filteredItems,
 			PageNumber = monitorQueryParameters.PageNumber,
 			RecordNumber = monitorQueryParameters.PageSize,
-			TotalCount = totalSize
+			TotalCount = items.Count
 		};
-
-		string serializedResult = JsonConvert.SerializeObject(result);
-		await _cache.TrySetStringAsync(cacheKey, serializedResult);
-
 		return result;
 	}
 
 	public async Task<BaseMonitorDto> GetMonitorDetailsAsync(int id)
 	{
-		string cacheKey = $"MonitorDetails-{id}";
-		string? cachedData = await _cache.TryGetStringAsync(cacheKey);
+		BaseMonitorDto? cachedData = await _cache.TryGetResultAsync<BaseMonitorDto>($"{_cacheKey}-{id}");
 
-		if (!string.IsNullOrEmpty(cachedData))
-		{
-			BaseMonitorDto? cachedResult = JsonConvert.DeserializeObject<BaseMonitorDto>(cachedData);
-			return cachedResult ?? new BaseMonitorDto();
-		}
+		if (cachedData != null)
+			return cachedData;
 
-		var monitor = await _context.Monitors
+		BaseMonitorDto? monitor = await _context.Monitors
 			.Where(m => m.IsActive)
 			.Select(m => new BaseMonitorDto
 			{
@@ -94,19 +75,10 @@ public class MonitorRepository : GenericRepository<Monitor>, IMonitorRepository
 			.FirstOrDefaultAsync(m => m.Id == id);
 
 		if (monitor == null)
-		{
 			throw new NotFoundException(nameof(Monitor), id);
-		}
 
-		string serializedResult = JsonConvert.SerializeObject(monitor);
-		await _cache.TrySetStringAsync(cacheKey, serializedResult);
+		await _cache.TrySetResultAsync($"{_cacheKey}-{id}", monitor);
 
 		return monitor;
-	}
-
-	private string GenerateCacheKey(IMonitorQueryParameters monitorQueryParameters)
-	{
-		// Generowanie klucza z wykorzystaniem IsActive, Name, Action, Query itp.
-		return $"{monitorQueryParameters.IsActive}-{monitorQueryParameters.Name}-{monitorQueryParameters.Action}-{monitorQueryParameters.Query}-{monitorQueryParameters.PageNumber}-{monitorQueryParameters.PageSize}";
 	}
 }

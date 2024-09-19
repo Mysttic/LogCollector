@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 
 public class LoggerCacheService : ILoggerCacheService
 {
@@ -22,6 +23,23 @@ public class LoggerCacheService : ILoggerCacheService
 		catch
 		{
 			return false;
+		}
+	}
+
+	public async Task ClearCache(string cacheKey)
+	{
+		if (!_isRedisAvailable)
+		{
+			return;
+		}
+
+		try
+		{
+			await _cache.RemoveAsync(cacheKey);
+		}
+		catch
+		{
+			_isRedisAvailable = false;
 		}
 	}
 
@@ -64,5 +82,49 @@ public class LoggerCacheService : ILoggerCacheService
 		}
 	}
 
+	public async Task<TResult?> TryGetResultAsync<TResult>(string key)
+	{
+		if (!_isRedisAvailable)
+		{
+			return default;
+		}
+
+		try
+		{
+			string? cachedData = await _cache.GetStringAsync(key);
+			if (!string.IsNullOrEmpty(cachedData))
+			{
+				TResult? cachedResult = JsonConvert.DeserializeObject<TResult>(cachedData);
+				return cachedResult ?? default;
+			}
+		}
+		catch
+		{
+			_isRedisAvailable = false;
+		}
+		return default;
+		
+	}
+
+	public async Task TrySetResultAsync<TResult>(string key, TResult value)
+	{
+		if (!_isRedisAvailable)
+		{
+			return;
+		}
+
+		try
+		{
+			string serializedResult = JsonConvert.SerializeObject(value);
+			await _cache.SetStringAsync(key, serializedResult, new DistributedCacheEntryOptions
+			{
+				AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+			});
+		}
+		catch
+		{
+			_isRedisAvailable = false;
+		}
+	}
 }
 

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 public class AlertRepository : GenericRepository<Alert>, IAlertRepository
 {
@@ -9,71 +8,54 @@ public class AlertRepository : GenericRepository<Alert>, IAlertRepository
 	{
 	}
 
-	public async Task<PagedResult<TResult>> GetAllAsync<TResult>(IAlertQueryParameters alertQueryParameters)
+	public async Task<PagedResult<TResult>> GetAllAsync<TResult>(IAlertQueryParameters alertQueryParameters) where TResult : BaseAlertDto
 	{
-		string cacheKey = GenerateCacheKey(alertQueryParameters);
-		string? cachedData = await _cache.TryGetStringAsync(cacheKey);
-
-		if (!string.IsNullOrEmpty(cachedData))
+		List<TResult>? items = await _cache.TryGetResultAsync<List<TResult>>(_cacheKey);
+		if (items == null)
 		{
-			PagedResult<TResult>? cachedResult = JsonConvert.DeserializeObject<PagedResult<TResult>>(cachedData);
-			return cachedResult ?? new PagedResult<TResult>();
+			items = await _context.Set<Alert>()
+				.ProjectTo<TResult>(_mapper.ConfigurationProvider)
+				.ToListAsync();
+
+			await _cache.TrySetResultAsync(_cacheKey, items);
 		}
 
-		var totalSize = await _context.Set<Alert>().CountAsync();
-		var items = await _context.Set<Alert>()
-			.Where(a => alertQueryParameters.MonitorId > 0 ? a.MonitorId == alertQueryParameters.MonitorId : true)
-			.Where(a => !string.IsNullOrEmpty(alertQueryParameters.Message) ? a.Message!.ToLower().Contains(alertQueryParameters.Message.ToLower()) : true)
-			.Where(a => !string.IsNullOrEmpty(alertQueryParameters.Content) ? a.Content!.ToLower().Contains(alertQueryParameters.Content.ToLower()) : true)
-			.Skip(alertQueryParameters.StartIndex)
-			.Take(alertQueryParameters.PageSize)
-			.ProjectTo<TResult>(_mapper.ConfigurationProvider)
-			.ToListAsync();
+		List<TResult> filteredItems = items
+				.Where(a => alertQueryParameters.MonitorId > 0 ? a.MonitorId == alertQueryParameters.MonitorId : true)
+				.Where(a => !string.IsNullOrEmpty(alertQueryParameters.Message) ? a.Message!.ToLower().Contains(alertQueryParameters.Message.ToLower()) : true)
+				.Where(a => !string.IsNullOrEmpty(alertQueryParameters.Content) ? a.Content!.ToLower().Contains(alertQueryParameters.Content.ToLower()) : true)
+				.Skip(alertQueryParameters.StartIndex)
+				.Take(alertQueryParameters.PageSize)
+				.ToList();
 
 		PagedResult<TResult> result = new PagedResult<TResult>
 		{
-			Items = items,
+			Items = filteredItems,
 			PageNumber = alertQueryParameters.PageNumber,
 			RecordNumber = alertQueryParameters.PageSize,
-			TotalCount = totalSize
+			TotalCount = items.Count
 		};
-
-		string serializedResult = JsonConvert.SerializeObject(result);
-		await _cache.TrySetStringAsync(cacheKey, serializedResult);
-
 		return result;
 	}
 
 	public async Task<BaseAlertDto> GetAlertDetailsAsync(int id)
 	{
-		string cacheKey = $"Alert-{id}";
-		string? cachedData = await _cache.TryGetStringAsync(cacheKey);
+		BaseAlertDto? cachedData = await _cache.TryGetResultAsync<BaseAlertDto>($"{_cacheKey}-{id}");
 
-		if (!string.IsNullOrEmpty(cachedData))
-		{
-			BaseAlertDto? cachedResult = JsonConvert.DeserializeObject<BaseAlertDto>(cachedData);
-			return cachedResult ?? new BaseAlertDto();
-		}
+		if (cachedData != null)
+			return cachedData;
 
-		var alert = await _context.Set<Alert>()
+		BaseAlertDto? alert = await _context.Set<Alert>()
 			.Where(a => a.Id == id)
 			.ProjectTo<BaseAlertDto>(_mapper.ConfigurationProvider)
 			.FirstOrDefaultAsync();
 
 		if (alert == null)
-		{
 			throw new NotFoundException(nameof(Alert), id);
-		}
 
-		string serializedResult = JsonConvert.SerializeObject(alert);
-		await _cache.TrySetStringAsync(cacheKey, serializedResult);
+		await _cache.TrySetResultAsync($"{_cacheKey}-{id}", alert);
 
 		return alert;
 	}
 
-	private string GenerateCacheKey(IAlertQueryParameters alertQueryParameters)
-	{
-		// Generowanie klucza z wykorzystaniem MonitorId, Message, Content itp.
-		return $"{alertQueryParameters.MonitorId}-{alertQueryParameters.Message}-{alertQueryParameters.Content}-{alertQueryParameters.PageNumber}-{alertQueryParameters.PageSize}";
-	}
 }

@@ -22,4 +22,12 @@ public class LogEntryController : Controller
 
 		return Ok(new { pagedLogEntryResult.TotalCount, pagedLogEntryResult });
 	}
+
+	[HttpGet("{id}")]
+	public async Task<ActionResult<BaseLogEntryDto>> GetLog(int id)
+	{
+		var log = await _logEntryRepository.GetLogDetailsAsync(id);
+
+		return Ok(log);
+	}
 }
