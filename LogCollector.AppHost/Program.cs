@@ -1,14 +1,16 @@
+using Projects;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 // Services
+builder.AddProject<LogCollector_Service>("logcollector-service");
 
-builder.AddProject<Projects.LogCollector_Service>("logcollector-service");
+builder.AddProject<LogCollector_Monitor>("logcollector-monitor");
 
-builder.AddProject<Projects.LogCollector_Monitor>("logcollector-monitor");
+builder.AddProject<LogCollector_DockerManager>("logcollector-dockermanager");
 
 // App
-
-var backend = builder.AddProject<Projects.LogCollector_Browser_Server>("logcollector-browser-server");
+var backend = builder.AddProject<LogCollector_Browser_Server>("logcollector-browser-server");
 
 var frontend = builder.AddNpmApp("frontend",
 	@"../LogCollector.Browser/LogCollector.Browser.Client",

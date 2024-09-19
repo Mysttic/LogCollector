@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetAspire", "NetAspire", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogCollector.Monitor", "LogCollector.Monitor\LogCollector.Monitor.csproj", "{D9EF02CE-ABF7-4969-9CA8-790696912BA3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogCollector.DockerManager", "LogCollector.DockerManager\LogCollector.DockerManager.csproj", "{493C38AE-19F1-4F42-A633-405FC78FB370}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{D9EF02CE-ABF7-4969-9CA8-790696912BA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9EF02CE-ABF7-4969-9CA8-790696912BA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9EF02CE-ABF7-4969-9CA8-790696912BA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{493C38AE-19F1-4F42-A633-405FC78FB370}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{493C38AE-19F1-4F42-A633-405FC78FB370}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{493C38AE-19F1-4F42-A633-405FC78FB370}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{493C38AE-19F1-4F42-A633-405FC78FB370}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +86,7 @@ Global
 		{2CD5BF55-14B0-4FE3-9D31-EE391A482513} = {0C9E1955-94C9-4C3E-82FA-97BE59B5DACC}
 		{A7A707A8-2FDE-408B-BA6A-EB04B7531405} = {D4B2C811-598C-4436-B0C1-FC57AAB90156}
 		{D9EF02CE-ABF7-4969-9CA8-790696912BA3} = {0C9E1955-94C9-4C3E-82FA-97BE59B5DACC}
+		{493C38AE-19F1-4F42-A633-405FC78FB370} = {E54A53CC-71B3-4B3C-A309-F7D04057C917}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB5D34E6-8EA5-49F0-B76E-32635FD6C5DF}
