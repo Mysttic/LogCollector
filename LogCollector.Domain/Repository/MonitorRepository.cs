@@ -68,6 +68,7 @@ public class MonitorRepository : GenericRepository<Monitor>, IMonitorRepository
 				MonitorId = a.MonitorId,
 				CreatedAt = a.CreatedAt,
 				UpdatedAt = a.UpdatedAt,
+				InvokedAt = a.InvokedAt,
 				Id = a.Id
 			})
 			.ToList()

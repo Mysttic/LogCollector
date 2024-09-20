@@ -9,4 +9,5 @@ public class Alert : RecordBase
 	public int MonitorId { get; set; }
 
 	public Monitor? Monitor { get; set; }
+	public DateTime InvokedAt { get; set; }
 }

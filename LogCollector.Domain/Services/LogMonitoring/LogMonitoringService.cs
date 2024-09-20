@@ -64,12 +64,19 @@ public class LogMonitoringService
 	public void HandleMonitorAlertAction(Alert alert, Monitor monitor)
 	{
 		if (monitor.Action == MonitorAction.SendEmail.ToString())
-			_backgroundJobClient.Enqueue(() => _emailService.SendEmailAsync(monitor.Email_Address, monitor.Email_Subject, alert.Message));
+			_backgroundJobClient.Enqueue(() => SendAsync(alert, _emailService.SendEmailAsync(monitor.Email_Address, monitor.Email_Subject, alert.Message)));
 		else if (monitor.Action == MonitorAction.SendSms.ToString())
-			_backgroundJobClient.Enqueue(() => _smsService.SendSMSAsync(monitor.SMS_PhoneNumber, alert.Message));
+			_backgroundJobClient.Enqueue(() => SendAsync(alert, _smsService.SendSMSAsync(monitor.SMS_PhoneNumber, alert.Message)));
 		else if (monitor.Action == MonitorAction.CustomApiCall.ToString())
-			_backgroundJobClient.Enqueue(() => _customApiCallService.SendCustomApiCallAsync(monitor.CustomApiCall_Url, monitor.CustomApiCall_AuthKey, alert.Message));
+			_backgroundJobClient.Enqueue(() => SendAsync(alert, _customApiCallService.SendCustomApiCallAsync(monitor.CustomApiCall_Url, monitor.CustomApiCall_AuthKey, alert.Message)));
 		else
 			Console.WriteLine($"Unknown action {monitor.Action}");
+	}
+
+	public async Task SendAsync(Alert alert, Task action)
+	{
+		await action;
+		alert.InvokedAt = DateTime.Now;
+		
 	}
 }
