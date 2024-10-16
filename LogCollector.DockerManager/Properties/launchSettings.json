@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "LogCollector.DockerManager": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
