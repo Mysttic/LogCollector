@@ -51,7 +51,9 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-	app.UseMiddleware<LogCollectorMiddleware>();
+	app.UseSwagger();
+	app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "YourAPI v1"));
+	//app.UseMiddleware<LogCollectorMiddleware>();
 }
 
 app.UseHttpsRedirection();

@@ -36,12 +36,17 @@ app.UseHangfireDashboard("/dashboard");
 
 app.UseHttpsRedirection();
 
-//// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+	app.UseSwagger();
+	app.UseSwaggerUI();
+}
+else
+{
+	app.UseSwagger();
+	app.UseSwaggerUI();
+}
 
 var recurringJobManager = app.Services.GetRequiredService<IRecurringJobManager>();
 

@@ -1,48 +1,48 @@
 services:
-  # apphost:
-  #   build:
-  #     context: .
-  #     dockerfile: LogCollector.AppHost/Dockerfile
-  #   ports:
-  #     - "8080:80" 
-  #   depends_on:
-  #     - logcollectorservice
-  #     - logcollectormonitor
-  #     - logcollectordockermanager
-  #     - logcollectorfrontend
-  #     - logcollectorbrowserserver
-
   logcollectorservice:
     build:
       context: .
       dockerfile: LogCollector.Service/Dockerfile
     ports:
-      - "9081:80"
+      - "9081:8080"
+    depends_on:
+      - mssql
 
   logcollectormonitor:
     build:
       context: .
       dockerfile: LogCollector.Monitor/Dockerfile
     ports:
-      - "9082:80"
-
-  #logcollectordockermanager:
-  #  build:
-  #    context: .
-  #    dockerfile: LogCollector.DockerManager/Dockerfile
-  #  ports:
-   #   - "9083:80"
+      - "9082:8080"
+    depends_on:
+      - mssql
 
   logcollectorbrowserserver:
     build:
       context: .  
       dockerfile: LogCollector.Browser/LogCollector.Browser.Server/Dockerfile
     ports:
-      - "9084:80"
+      - "9084:8080"
+    depends_on:
+      - mssql    
 
   logcollectorfrontend:
     build:
       context: ./LogCollector.Browser/LogCollector.Browser.Client
       dockerfile: Dockerfile
     ports:
-      - "5173:5173"
+      - "5173:80"
+    
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - SA_PASSWORD=YourStrong!Passw0rd
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+volumes:
+  mssql_data:
+    driver: local

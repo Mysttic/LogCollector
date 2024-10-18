@@ -41,6 +41,10 @@ builder.Services.AddAutoMapper(typeof(LogEntryProfile));
 
 var app = builder.Build();
 
+using var scope = app.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<LogCollectorDbContext>();
+dbContext.Database.Migrate();
+
 app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
@@ -51,7 +55,9 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-	app.UseMiddleware<LogCollectorMiddleware>();
+	app.UseSwagger();
+	app.UseSwaggerUI();
+	//app.UseMiddleware<LogCollectorMiddleware>();
 }
 
 app.UseHttpsRedirection();
