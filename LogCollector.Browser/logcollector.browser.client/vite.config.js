@@ -32,8 +32,6 @@ if (!isDocker && (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath))) 
     }
 }
 
-const target = 'https://localhost:7148';
-
 // httpsConfig zawiera HTTPS tylko wtedy, gdy nie działa w Dockerze
 const httpsConfig = !isDocker
     ? {
@@ -43,22 +41,33 @@ const httpsConfig = !isDocker
     : false;
 
 // https://vitejs.dev/config/
-export default defineConfig({
-    plugins: [plugin()],
-    resolve: {
-        alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url))
-        }
-    },
-    server: {
-        proxy: {
-            '/api': {
-                target,
-                secure: false,
-                changeOrigin: true
+export default defineConfig(({ mode }) => {
+    // Ustal docelowy serwer API i port na podstawie trybu (development lub production)
+    let target = 'https://localhost:7148';
+    let port = 9084;
+
+    if (mode === 'development') {
+        target = 'https://localhost:7148'; // Adres backendu dla development
+        port = 5173;
+    } 
+
+    return {
+        plugins: [plugin()],
+        resolve: {
+            alias: {
+                '@': fileURLToPath(new URL('./src', import.meta.url))
             }
         },
-        port: 5173,
-        https: httpsConfig
-    }
+        server: {
+            proxy: {
+                '/api': {
+                    target,
+                    secure: false,
+                    changeOrigin: true
+                }
+            },
+            port: port,
+            https: httpsConfig
+        }
+    };
 });

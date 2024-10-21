@@ -22,6 +22,9 @@ RUN npm run build
 # Etap 2: Serwowanie aplikacji przy użyciu Nginx
 FROM nginx:alpine
 
+# Instalacja Node.js i npm
+RUN apk update && apk add --no-cache nodejs npm
+
 # Kopiowanie zbudowanej aplikacji do katalogu Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 

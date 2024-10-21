@@ -2,11 +2,17 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+#if DEBUG
+var dbConnection = builder.Configuration.GetConnectionString("LocalConnection");
+#else
+var dbConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+#endif
+
 builder.AddServiceDefaults();
 
 builder.Services.AddDbContext<LogCollectorDbContext>(options =>
 {
-	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+	options.UseSqlServer(dbConnection);
 });
 
 builder.Services.AddStackExchangeRedisCache(options =>
